@@ -1470,7 +1470,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2586000258594986763}
         m_TargetAssemblyTypeName: StarterAssets.PlayerNetworkBehaviour, Assembly-CSharp
         m_MethodName: yesGreetAnswer
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2858,7 +2858,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2586000258594986763}
         m_TargetAssemblyTypeName: StarterAssets.PlayerNetworkBehaviour, Assembly-CSharp
         m_MethodName: yesClapAnswer
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5890,7 +5890,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2586000258594986763}
         m_TargetAssemblyTypeName: StarterAssets.PlayerNetworkBehaviour, Assembly-CSharp
         m_MethodName: yesDanceAnswer
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -14863,18 +14863,13 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  animID: 0
-  animationID: 0
   inputButton: {fileID: 0}
   ToggleButton: {fileID: 0}
   mask:
     serializedVersion: 2
     m_Bits: 0
   countAnimTime: 2
-  transLoc: {fileID: 0}
-  locationSpawn: {fileID: 0}
   animator: {fileID: 6982812146204527121}
-  netAnim: {fileID: 0}
   inputData: {fileID: 0}
   inputPrefab: {fileID: 0}
   requestPanel: {fileID: 0}
@@ -14894,7 +14889,6 @@ MonoBehaviour:
   cubePrefab: {fileID: 707797897606315053, guid: 3ffafe6bd3b261548828bff23793637c, type: 3}
   objectPos: {fileID: 1106079717396831505, guid: 92dc6170cb81722428b511c4e60ffc58, type: 3}
   camTransform: {fileID: 8338988566280778637}
-  inputCanvas: {fileID: 8181599131014462733}
   netID: 0
   localID: 0
   locID: 0
@@ -14905,12 +14899,12 @@ MonoBehaviour:
   otherClients: 0
   forOthers: 0
   othersPosID: 0
-  testLocID: 0
   testID: 0
   idNet: 0
   localeId: 0
   networkId: 0
   idNetwork: 0
+  startID: 0
   healthCount: 20
   targe: {fileID: 8338988566280778637}
   floatingInfo: {fileID: 8680847376809488784}
@@ -14927,10 +14921,8 @@ MonoBehaviour:
   newRot: {x: 0, y: 0, z: 0, w: 0}
   locRot: {x: 0, y: 0, z: 0, w: 0}
   targetRot: {x: 0, y: 0, z: 0, w: 0}
-  newTargetRot: {x: 0, y: 0, z: 0, w: 0}
   playerName: 
   inputName: Test
-  getName: 
   playName: 
 --- !u!64 &232263052806858951
 MeshCollider:

@@ -145,19 +145,19 @@ namespace StarterAssets
         public GameObject selfiePos2;
 
         [SyncVar]
-        public Vector3 newSelfiePos;
+        private Vector3 newSelfiePos;
         [SyncVar]
-        public Vector3 newSelfirPos2;
+        private Vector3 newSelfirPos2;
 
         [SyncVar]
         private Vector3 pointNewPos;
 
         [SyncVar]
-        public Quaternion newRot;
+        private Quaternion newRot;
         [SyncVar]
-        public Quaternion locRot;
+        private Quaternion locRot;
         [SyncVar]
-        public Quaternion targetRot;
+        private Quaternion targetRot;
 
         [SyncVar(hook = nameof(OnDisplayNameChangeUpdated))]
         public string playerName;
@@ -539,7 +539,7 @@ namespace StarterAssets
         }
 
         [Command]
-        void CmdGreetAnim(uint objectId, uint localID)
+        void CmdGreetAnim(uint objectId, uint localID, int animID)
         {
             Debug.Log("Test Anim");
             uint objId = GetComponent<NetworkIdentity>().netId;
@@ -568,11 +568,11 @@ namespace StarterAssets
                 //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
                 opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
             }
-            RpcGreetAnimator(opponentId.connectionToClient, objId, opponentId, localeID);
+            RpcGreetAnimator(opponentId.connectionToClient, objId, opponentId, localeID, animID);
         }
 
         [Command]
-        void CmdClapAnim(uint objectId, uint localID)
+        void CmdClapAnim(uint objectId, uint localID, int animID)
         {
             Debug.Log("Test Anim");
             uint objId = GetComponent<NetworkIdentity>().netId;
@@ -601,11 +601,11 @@ namespace StarterAssets
                 //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
                 opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
             }
-            RpcClapAnimator(opponentId.connectionToClient, objId, opponentId, localeID);
+            RpcClapAnimator(opponentId.connectionToClient, objId, opponentId, localeID, animID);
         }
 
         [Command]
-        void CmdDanceAnim(uint objectId, uint localID)
+        void CmdDanceAnim(uint objectId, uint localID, int animID)
         {
             Debug.Log("Test Anim");
             uint objId = GetComponent<NetworkIdentity>().netId;
@@ -634,11 +634,11 @@ namespace StarterAssets
                 //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
                 opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
             }
-            RpcDanceAnimator(opponentId.connectionToClient, objId, opponentId, localeID);
+            RpcDanceAnimator(opponentId.connectionToClient, objId, opponentId, localeID, animID);
         }
 
         [TargetRpc]
-        void RpcLocaleGreetAnim(NetworkIdentity localeID)
+        void RpcLocaleGreetAnim(NetworkIdentity localeID, int animID)
         {
             Debug.Log("Locale Anim");
             //this.gameObject.transform.position = varSpawn;
@@ -668,11 +668,11 @@ namespace StarterAssets
 
             localeID.gameObject.GetComponent<PlayerNetworkBehaviour>().WaitCanvas.gameObject.SetActive(false);
 
-            CmdGreetAnim(idNetwork, locID);
+            CmdGreetAnim(idNetwork, locID, animID);
         }
 
         [TargetRpc]
-        void RpcLocaleClapAnime(NetworkIdentity localeID)
+        void RpcLocaleClapAnime(NetworkIdentity localeID, int animID)
         {
             Debug.Log("Locale Anim");
             //this.gameObject.transform.position = varSpawn;
@@ -701,11 +701,11 @@ namespace StarterAssets
             }
 
             localeID.gameObject.GetComponent<PlayerNetworkBehaviour>().WaitCanvas.gameObject.SetActive(false);
-            CmdClapAnim(idNetwork, locID);
+            CmdClapAnim(idNetwork, locID, animID);
         }
 
         [TargetRpc]
-        void RpcLocaleDanceAnim(NetworkIdentity localeID)
+        void RpcLocaleDanceAnim(NetworkIdentity localeID, int animID)
         {
             Debug.Log("Locale Anim");
             //this.gameObject.transform.position = varSpawn;
@@ -734,11 +734,11 @@ namespace StarterAssets
             }
 
             localeID.gameObject.GetComponent<PlayerNetworkBehaviour>().WaitCanvas.gameObject.SetActive(false);
-            CmdDanceAnim(idNetwork, locID);
+            CmdDanceAnim(idNetwork, locID, animID);
         }
 
         [TargetRpc]
-        void RpcGreetAnimator(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID)
+        void RpcGreetAnimator(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID, int animID)
         {
             localeID.gameObject.GetComponent<Transform>().position = newVar;
             localeID.gameObject.GetComponent<Transform>().rotation = newRot;
@@ -773,7 +773,7 @@ namespace StarterAssets
         }
 
         [TargetRpc]
-        void RpcClapAnimator(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID)
+        void RpcClapAnimator(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID, int animID)
         {
             localeID.gameObject.GetComponent<Transform>().position = newVar;
             localeID.gameObject.GetComponent<Transform>().rotation = newRot;
@@ -808,7 +808,7 @@ namespace StarterAssets
         }
 
         [TargetRpc]
-        void RpcDanceAnimator(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID)
+        void RpcDanceAnimator(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID, int animID)
         {
             localeID.gameObject.GetComponent<Transform>().position = newVar;
             localeID.gameObject.GetComponent<Transform>().rotation = newRot;
@@ -860,20 +860,20 @@ namespace StarterAssets
         {
             Debug.Log("You are agree");
 
-            CmdGreetAnimPlay();
+            CmdGreetAnimPlay(animationID);
             //CmdAnim(idNetwork);
         }
 
         public void yesClapAnswer()
         {
             Debug.Log("You are agree");
-            CmdClapAnimPlay();
+            CmdClapAnimPlay(animationID);
         }
 
         public void yesDanceAnswer()
         {
             Debug.Log("You are agree");
-            CmdDanceAnimPlay();
+            CmdDanceAnimPlay(animationID);
         }
 
         public void noAnswer()
@@ -904,7 +904,7 @@ namespace StarterAssets
         }
 
         [Command(requiresAuthority = false)]
-        void CmdGreetAnimPlay()
+        void CmdGreetAnimPlay(int animID)
         {
             NetworkIdentity localePlay = NetworkServer.spawned[locID];
 
@@ -920,11 +920,11 @@ namespace StarterAssets
                 animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
                 //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
             }
-            RpcLocaleGreetAnim(localePlay);
+            RpcLocaleGreetAnim(localePlay, animID);
         }
 
         [Command(requiresAuthority = false)]
-        void CmdClapAnimPlay()
+        void CmdClapAnimPlay(int animID)
         {
             NetworkIdentity localePlay = NetworkServer.spawned[locID];
 
@@ -941,11 +941,11 @@ namespace StarterAssets
                 //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
             }
             //RpcLocaleGreetAnim(localePlay, animID);
-            RpcLocaleClapAnime(localePlay);
+            RpcLocaleClapAnime(localePlay, animID);
         }
 
         [Command(requiresAuthority = false)]
-        void CmdDanceAnimPlay()
+        void CmdDanceAnimPlay(int animID)
         {
             NetworkIdentity localePlay = NetworkServer.spawned[locID];
 
@@ -962,7 +962,7 @@ namespace StarterAssets
                 //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
             }
             //RpcLocaleGreetAnim(localePlay, animID);
-            RpcLocaleDanceAnim(localePlay);
+            RpcLocaleDanceAnim(localePlay, animID);
         }
 
         [TargetRpc]
