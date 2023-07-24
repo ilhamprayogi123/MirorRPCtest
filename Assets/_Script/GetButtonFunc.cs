@@ -22,19 +22,10 @@ namespace StarterAssets
             thisButton = GetComponentInParent<PlayerNetworkBehaviour>().gameObject;
             //mainPlayer = GameObject.FindGameObjectWithTag("Player");
             btnAct = this.gameObject.GetComponent<Button>();
-            
-            if (typeButtton == 1)
-            {
-                btnAct.onClick.AddListener(() => thisButton.gameObject.GetComponent<PlayerNetworkBehaviour>().GreetButton());
-            }
-            else if (typeButtton == 2)
-            {
-                btnAct.onClick.AddListener(() => thisButton.gameObject.GetComponent<PlayerNetworkBehaviour>().ClapButton());
-            }
-            else if (typeButtton == 3)
-            {
-                btnAct.onClick.AddListener(() => thisButton.gameObject.GetComponent<PlayerNetworkBehaviour>().DanceBUtton());
-            }
+
+            //btnAct.onClick.AddListener(() => thisButton.gameObject.GetComponent<PlayerNetworkBehaviour>().AnimationButton(typeButtton));
+
+            btnAct.onClick.AddListener(() => thisButton.gameObject.GetComponent<UiCanvas>().AnimationButton(typeButtton));
         }
 
         // Update is called once per frame

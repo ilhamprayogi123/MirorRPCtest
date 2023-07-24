@@ -8,11 +8,9 @@ namespace StarterAssets
     public class CoupleAnimationManager : MonoBehaviour
     {
         [SerializeField]
-        List<CoupleAnimationData> animationData;
+        public List<CoupleAnimationData> animationData;
         int count;
         private string stateName;
-
-        //public Animator animator;
 
         public void SpawnButton()
         {
@@ -21,22 +19,5 @@ namespace StarterAssets
                 Instantiate(animationData[i].button);
             }
         }
-
-        /*
-        public void GreetingAnim()
-        {
-            animator.CrossFadeInFixedTime("Greeting", 0.1f);
-        }
-
-        public void ClapAnim()
-        {
-            animator.CrossFadeInFixedTime("Clapping", 0.1f);
-        }
-
-        public void DanceAnim()
-        {
-            animator.CrossFadeInFixedTime("Dance", 0.1f);
-        }
-        */
     }
 }

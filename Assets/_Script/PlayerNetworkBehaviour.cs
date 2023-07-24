@@ -6,30 +6,35 @@ using Mirror;
 using Cinemachine;
 using TMPro;
 using UnityEngine.UI;
+using System.Runtime.CompilerServices;
+using System.Linq;
 
 namespace StarterAssets
 {
     public class PlayerNetworkBehaviour : NetworkBehaviour
     {
-        [SyncVar(hook = nameof(OnScoreCountChanged))]
-        int scoreCount = 0;
-
-        //[SerializeField]
         private GameObject animationManager;
-        private CoupleAnimationManager animManager;
+        CoupleAnimationManager animManager;
+
+        [SerializeField]
+        private UiCanvas uiCanvasObj;
 
         private GetButtonFunc buttonFunc;
+        //private Button joinObject;
 
-        //private bool yesReq;
-
+        public List<GameObject> ReqButton;
+        public List<CoupleAnimationData> animDatas;
+        
         [SyncVar]
         private int animID;
         [SyncVar]
-        private int animationID;
-
-        public Button inputButton;
-        public Button ToggleButton;
-
+        private int intIndexAnim;
+        [SyncVar]
+        public int varIndex;
+        [SyncVar]
+        private int maxIndex = 4;
+        
+        private bool isMax;
         public LayerMask mask;
 
         [SerializeField] private float countAnimTime = 10.0f;
@@ -38,34 +43,16 @@ namespace StarterAssets
 
         [SerializeField]
         private InputHandler inputData;
-
+        
         [SerializeField]
         private GameObject inputPrefab;
 
-        [SerializeField]
-        private GameObject requestPanel;
-
         public Button assignButton;
-
-        public GameObject RequestCanvas;
-        public GameObject ClapRequestCanvas;
-        public GameObject DanceRequestCanvas;
-
-        public GameObject WaitCanvas;
-        public GameObject AnimationCanvas;
-        public GameObject NoAnimCanvas;
-
-        public GameObject SelfieReqPanel;
-        public GameObject SelfieCanvas;
-        public GameObject joinButtonCanvas;
-        public GameObject buttonSelfieCanvas;
 
         CinemachineVirtualCamera virtualCam;
 
         public GameObject sphere;
-
-        private NetworkIdentity networkIdentityID;
-
+        
         public bool isSphereActive = false;
 
         public GameObject cubePrefab;
@@ -73,85 +60,48 @@ namespace StarterAssets
         private NetworkIdentity objNetId;
 
         private int _greetAnimID;
-        private bool _hasAnimator;
+        //private bool _hasAnimator;
 
         [SerializeField] private Transform camTransform;
-        //private RaycastHit hit;
-
+        
         [SyncVar] private GameObject objectID;
 
         private GameObject objectPlay;
         private Color objectColor;
 
         GameObject playerCam;
-
-        [SerializeField] private uint netID;
-
+        
         [SyncVar]
-        private uint localID;
+        public uint localID;
         [SyncVar]
-        private uint locID;
-
+        public uint locID;
         [SyncVar]
-        private uint localeSelfieID;
+        public uint localeSelfieID;
         [SyncVar]
-        private uint forOtherClientSelfieID;
+        public uint otherClientIDs;
         [SyncVar]
-        private uint clientSelfID;
+        public uint testClientID;
         [SyncVar]
-        private uint otherClientIDs;
-        [SyncVar]
-        private uint otherClients;
-        [SyncVar]
-        private uint forOthers;
-
-        public uint othersPosID;
-
-        //[SyncVar]
-        //public uint testLocID;
-        [SyncVar]
-        private uint testID;
-        [SyncVar]
-        private uint idNet;
-        [SyncVar]
-        private uint localeId;
-        //[SyncVar(hook = "OnChangeID")]
-        private uint networkId;
+        public uint idNet;
+        
         [SyncVar(hook = "OnChangeID")]
-        private uint idNetwork;
+        public uint idNetwork;
+        
         [SyncVar]
-        private uint startID;
-
-        [SerializeField] private int healthCount = 20;
-
+        public uint objId;
         public Transform targe;
-        public GameObject floatingInfo;
-
-        public bool isWin = false;
-        public bool isDefeat = false;
-        public bool isButtonActive = false;
 
         public TMP_Text playerNameText;
+
+        [SyncVar(hook = nameof(RpcChangeIndex))]
+        public int selfiePosIndex;
+
+        public GameObject[] selfiePos;
 
         [SyncVar]
         private Vector3 newVar;
         [SyncVar]
         private Vector3 SpawnVar;
-        private Vector3 varSpawn;
-
-        //[SyncVar]
-        public GameObject selfiePos1;
-        //[SyncVar]
-        public GameObject selfiePos2;
-
-        [SyncVar]
-        private Vector3 newSelfiePos;
-        [SyncVar]
-        private Vector3 newSelfirPos2;
-
-        [SyncVar]
-        private Vector3 pointNewPos;
-
         [SyncVar]
         private Quaternion newRot;
         [SyncVar]
@@ -163,59 +113,44 @@ namespace StarterAssets
         public string playerName;
 
         [SerializeField] 
-        private string inputName = "Player";
-        //[SerializeField] private string getName;
-
+        private string inputName;
         [SerializeField]
         private string playName;
+
+        //public bool changePos;
+        public TMP_Text animRequest;
 
         // Start is called before the first frame update
         void Start()
         {
-            //yesReq = false;
-            _hasAnimator = TryGetComponent(out animator);
-            //localIDchange = false;
-            startID = this.gameObject.GetComponent<NetworkIdentity>().netId;
-
+            //changePos = false;
+            isMax = false;
             sphere.gameObject.SetActive(false);
 
             localID = this.gameObject.GetComponent<NetworkIdentity>().netId;
-
             locID = localID;
 
-            SelfieCanvas.gameObject.SetActive(false);
-
-            ToggleButton = GameObject.FindGameObjectWithTag("ToggleButton").GetComponent<Button>();
-
-            ToggleButton.onClick.AddListener(() => ButtonActivate());
-
-            //newTargetRot = this.gameObject.GetComponent<Transform>().rotation;
             targetRot = this.gameObject.GetComponent<Transform>().rotation;
 
             inputPrefab = GameObject.FindGameObjectWithTag("Input");
-
             inputData = inputPrefab.transform.GetComponentInChildren<InputHandler>();
 
-            AssignAnimationIDs();
+            // Get animation manager data
+            animationManager = GameObject.FindGameObjectWithTag("AnimateManager");
+            animManager = animationManager.gameObject.GetComponent<CoupleAnimationManager>();
+            animDatas = animationManager.GetComponent<CoupleAnimationManager>().animationData;
 
             if (isLocalPlayer)
             {
-                animationManager = GameObject.FindGameObjectWithTag("AnimateManager");
-                animManager = animationManager.gameObject.GetComponent<CoupleAnimationManager>();
-
-                buttonSelfieCanvas.gameObject.SetActive(true);
                 this.gameObject.GetComponent<MeshCollider>().enabled = false;
 
-                RequestCanvas.gameObject.SetActive(false);
-
                 playName = inputName;
-
                 Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
 
                 assignButton.onClick.AddListener(assignAct);
 
                 playName = inputData.InputText;
-
+                
                 CharacterController charControl = GetComponent<CharacterController>();
                 PlayerInput playInput = GetComponent<PlayerInput>();
                 ThirdPersonController TPControl = GetComponent<ThirdPersonController>();
@@ -224,135 +159,45 @@ namespace StarterAssets
                 playInput.enabled = true;
                 TPControl.enabled = true;
 
+                // Camera follow locale player
                 playerCam = GameObject.Find("PlayerFollowCamera");
                 virtualCam = playerCam.GetComponent<CinemachineVirtualCamera>();
                 virtualCam.Follow = targe;
             }
         }
 
+        // Setup client name in server side
         [Command]
         public void CmdSetupPlayer(string _name, Color _col)
         {
-            //gameObject.GetComponent<NetworkIdentity>().AssignClientAuthority(this.GetComponent<NetworkIdentity>().connectionToClient);
             RpcClientName(_name, _col);
             playerName = _name;
             playerNameText.text = playerName;
             gameObject.name = playerName;
         }
 
-        [Command]
-        public void TestConnectCmd()
-        {
-            Debug.Log("Receive Hello from Client");
-        }
-
-        [Command]
-        public void TestConnectAllCmd()
-        {
-            Debug.Log("Get Hello from the Client");
-            ReplyServerToAll();
-        }
-
+        // Function to call Commmand Function to change name
         public void assignAct()
         {
             inputName = inputData.InputText;
-
             playName = inputName;
-
+            
             Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-
             CmdSetupPlayer(playName, color);
         }
-
-        [Command]
-        public void GetHelloCmd()
-        {
-            Debug.Log("Get Hola from client");
-            TargetReplyHola();
-        }
-
-        [Command]
-        public void GetScore()
-        {
-            Debug.Log("Player Get score");
-            scoreCount += 10;
-        }
-
-        [Command]
-        public void LoseHealthCommand()
-        {
-            Debug.Log("One player lose health");
-            healthCount -= 10;
-            HealthLoseClient();
-        }
-
-        [Command]
-        public void PlayerAttack(GameObject target, int damage)
-        {
-            NetworkIdentity opponentIdentity = target.GetComponent<NetworkIdentity>();
-            GetAttacked(opponentIdentity.connectionToClient, damage);
-        }
-
-        [Command]
-        public void ChatCmd(uint netId)
-        {
-            NetworkIdentity opponentIdentity = NetworkServer.spawned[netId];
-            Debug.Log("One player message other player");
-            //healthCount -= damage;
-            GotMessage(opponentIdentity.connectionToClient);
-        }
-
-        [Command]
-        public void CmdSpawnItem()
-        {
-            Vector3 pos = objectPos.transform.position;
-            Quaternion rot = objectPos.transform.rotation;
-            GameObject newCubeObject = Instantiate(cubePrefab, pos, rot);
-
-            NetworkServer.Spawn(newCubeObject);
-        }
-
-        [Server]
-        public void StopClient(GameObject gameObj)
-        {
-            Debug.Log("One player removed");
-
-            NetworkIdentity playerId = gameObj.GetComponent<NetworkIdentity>();
-            TargetDisconnect(playerId.connectionToClient);
-        }
-
-        [TargetRpc]
-        public void TargetDisconnect(NetworkConnectionToClient netId)
-        {
-            NetworkManager.singleton.StopClient();
-        }
-
+        
+        // Command to give data to server about client interact with other client
         [Command]
         public void CmdClick(uint objectId, Vector3 locPos, uint localID, Quaternion locRot)
         {
             NetworkIdentity opponentId = NetworkServer.spawned[objectId];
-
-            uint objId = objectId;
+            objId = objectId;
             uint idLocale = localID;
-
             Debug.Log(this.gameObject.name + " is clicking " + opponentId.gameObject.name);
-
-            //opponentId.gameObject.GetComponent<PlayerInput>().enabled = false;
-
             TargetClick(opponentId.connectionToClient, objId, locPos, opponentId, idLocale, locRot);
         }
 
-        [Command]
-        public void LocaleCmd(uint localeIDs)
-        {
-            NetworkIdentity opponentId = NetworkServer.spawned[localeIDs];
-
-            //uint objId = objectId;
-            uint idLocale = localeIDs;
-
-            LocaleRPC(opponentId.connectionToClient, opponentId, idLocale);
-        }
-
+        // First interact for client and make the player who got clicked can't move
         [TargetRpc]
         public void TargetClick(NetworkConnectionToClient netId, uint idNetwork, Vector3 posSpawn, NetworkIdentity networkID, uint localeIDs, Quaternion locRot)
         {
@@ -361,185 +206,40 @@ namespace StarterAssets
             networkID.gameObject.GetComponent<CharacterController>().enabled = false;
             networkID.gameObject.GetComponent<PlayerInput>().enabled = false;
             networkID.gameObject.GetComponent<ThirdPersonController>().enabled = false;
+            uiCanvasObj.WaitCanvas.gameObject.SetActive(true);
 
-            //RequestCanvas.gameObject.SetActive(true);
-            WaitCanvas.gameObject.SetActive(true);
-
-            //varSpawn = posSpawn;
             locID = localeIDs;
         }
 
-        [TargetRpc]
-        public void LocaleRPC(NetworkConnectionToClient netCon, NetworkIdentity netID, uint localeID)
-        {
-            netID.gameObject.GetComponent<CharacterController>().enabled = false;
-            netID.gameObject.GetComponent<PlayerInput>().enabled = false;
-            netID.gameObject.GetComponent<ThirdPersonController>().enabled = false;
-
-            locID = localeID;
-        }
-
-        [ClientRpc]
-        void RpcPaint(GameObject gameObj, Color col)
-        {
-            gameObj.GetComponent<Renderer>().material.color = col;
-        }
-
-        [Command]
-        public void CmdChangeColor(GameObject gameObj, Color color)
-        {
-            gameObj.GetComponent<Renderer>().material.color = color;
-            RpcPaint(gameObj, color);
-        }
-
-        [Command]
-        public void AgreeCmd()
-        {
-            Debug.Log(this.gameObject.name + " agree");
-        }
-
-        [TargetRpc]
-        public void GotMessage(NetworkConnectionToClient target)
-        {
-            //healthCount -= 10;
-            Debug.Log("You got Hello from other client");
-        }
-
-        [TargetRpc]
-        public void HealthLoseClient()
-        {
-            Debug.Log("You lose health");
-            healthCount -= 10;
-        }
-
-        [Server]
-        public void ReceiveCongrats()
-        {
-            if (scoreCount > 20 && isWin == false)
-            {
-                Debug.Log("Player have win");
-                isWin = true;
-                CongratsFunc();
-            }
-        }
-
-        [ClientRpc]
-        public void RpcSphere()
-        {
-            isSphereActive = true;
-            sphere.gameObject.SetActive(true);
-        }
-
-        [Server]
-        public void ActivateSphere()
-        {
-            if (isSphereActive == false)
-            {
-                isSphereActive = true;
-                Debug.Log("Sphere Active");
-                sphere.gameObject.SetActive(true);
-                RpcSphere();
-            }
-        }
-
-        [Server]
-        public void ReceiveDefeat()
-        {
-            if (healthCount <= 0 && isDefeat == false)
-            {
-                Debug.Log("One Player has defeated");
-                isDefeat = true;
-                TargetDefeatFunc();
-            }
-        }
-
-        [ClientRpc]
-        public void ReplyServerToAll()
-        {
-            Debug.Log("Get Hai from Server");
-        }
-
-        [TargetRpc]
-        public void TargetReplyHola()
-        {
-            Debug.Log("Get Hola from Server");
-        }
-
-        [ClientRpc]
-        public void CongratsFunc()
-        {
-            Debug.Log("Player side is Win");
-        }
-
-        [TargetRpc]
-        public void TargetDefeatFunc()
-        {
-            Debug.Log("One Player is Defeated");
-        }
-
+        // Change Player name
         private void OnDisplayNameChangeUpdated(string oldName, string newName)
         {
-            playerNameText.text = playerName;
             gameObject.name = playerName + " Player";
+            playerNameText.text = playerName;
         }
 
+        // Change player name to display for all other client
         [ClientRpc]
         public void RpcClientName(string name, Color col)
         {
             playerName = name;
         }
 
-        [ClientRpc]
-        public void RpcLogNewName(string newName)
-        {
-            Debug.Log(newName);
-        }
-
-        [TargetRpc]
-        public void GetAttacked(NetworkConnectionToClient target, int damage)
-        {
-            healthCount -= damage;
-            Debug.Log("You got damage");
-        }
-
-        private IEnumerator animTIme(float animTime)
-        {
-            yield return new WaitForSeconds(animTime);
-
-            animator.SetBool(_greetAnimID, false);
-        }
-
-        public void ShowName()
-        {
-            Debug.Log($"Input Field Value: {inputData.InputText}");
-        }
-
+        // Call Command Function to change name
         public void InputName()
         {
             if (isLocalPlayer)
             {
                 inputName = inputData.InputText;
-
                 playName = inputName;
-
                 Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-
                 CmdSetupPlayer(playName, color);
             }
         }
-
-        void OnScoreCountChanged(int oldCount, int newCount)
-        {
-            Debug.Log($"We had {oldCount} score, but now we have {newCount} ecore!");
-        }
-
-        private void AssignAnimationIDs()
-        {
-            _greetAnimID = Animator.StringToHash("Greeting");
-        }
-
+        
+        // Command Function to call the animation using the data that was successfully obtained from the animation manager and also change position locale client position in server side
         [Command]
-        void CmdGreetAnim(uint objectId, uint localID, int animID)
+        void CmdAnimation(uint objectId, uint localID, int animIndex)
         {
             Debug.Log("Test Anim");
             uint objId = GetComponent<NetworkIdentity>().netId;
@@ -560,88 +260,17 @@ namespace StarterAssets
 
             IEnumerator animTimePlay(float animPlay)
             {
-                //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, true);
-                opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime(/*animationData[index].AnimState*/"Greeting" , 0.1f);
-
+                opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime(animDatas[animIndex].AnimState, 0.1f);
                 yield return new WaitForSeconds(animPlay);
-
-                //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
                 opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
             }
-            RpcGreetAnimator(opponentId.connectionToClient, objId, opponentId, localeID, animID);
+            RpcAnimator(opponentId.connectionToClient, objId, opponentId, localeID, animIndex);
         }
 
-        [Command]
-        void CmdClapAnim(uint objectId, uint localID, int animID)
-        {
-            Debug.Log("Test Anim");
-            uint objId = GetComponent<NetworkIdentity>().netId;
-            uint locIDs = GetComponent<NetworkIdentity>().netId;
-
-            objId = objectId;
-            locIDs = localID;
-
-            NetworkIdentity opponentId = NetworkServer.spawned[objectId];
-            NetworkIdentity localeID = NetworkServer.spawned[localID];
-
-            localeID.gameObject.GetComponent<Transform>().position = newVar;
-            localeID.gameObject.GetComponent<Transform>().rotation = newRot;
-
-            opponentId.gameObject.GetComponent<Transform>().rotation = targetRot;
-
-            StartCoroutine(animTimePlay(countAnimTime));
-
-            IEnumerator animTimePlay(float animPlay)
-            {
-                //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, true);
-                opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Clapping" , 0.1f);
-
-                yield return new WaitForSeconds(animPlay);
-
-                //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
-                opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
-            }
-            RpcClapAnimator(opponentId.connectionToClient, objId, opponentId, localeID, animID);
-        }
-
-        [Command]
-        void CmdDanceAnim(uint objectId, uint localID, int animID)
-        {
-            Debug.Log("Test Anim");
-            uint objId = GetComponent<NetworkIdentity>().netId;
-            uint locIDs = GetComponent<NetworkIdentity>().netId;
-
-            objId = objectId;
-            locIDs = localID;
-
-            NetworkIdentity opponentId = NetworkServer.spawned[objectId];
-            NetworkIdentity localeID = NetworkServer.spawned[localID];
-
-            localeID.gameObject.GetComponent<Transform>().position = newVar;
-            localeID.gameObject.GetComponent<Transform>().rotation = newRot;
-
-            opponentId.gameObject.GetComponent<Transform>().rotation = targetRot;
-
-            StartCoroutine(animTimePlay(countAnimTime));
-
-            IEnumerator animTimePlay(float animPlay)
-            {
-                //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, true);
-                opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Dance" , 0.1f);
-
-                yield return new WaitForSeconds(animPlay);
-
-                //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
-                opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
-            }
-            RpcDanceAnimator(opponentId.connectionToClient, objId, opponentId, localeID, animID);
-        }
-
+        // Function to call the animation using the data that was successfully obtained from the animation manager in local client side, also change locale player position and rotation
         [TargetRpc]
-        void RpcLocaleGreetAnim(NetworkIdentity localeID, int animID)
+        void RpclocalAnimPlay(NetworkIdentity localeID, int animIndex)
         {
-            Debug.Log("Locale Anim");
-            //this.gameObject.transform.position = varSpawn;
             localeID.gameObject.GetComponent<Transform>().position = newVar;
             localeID.gameObject.GetComponent<Transform>().rotation = newRot;
 
@@ -649,96 +278,25 @@ namespace StarterAssets
 
             IEnumerator animTimePlay(float animTime)
             {
-                //animator.SetBool(_greetAnimID, true);
-                animator.CrossFadeInFixedTime("Greeting" , 0.1f);
-
+                animator.CrossFadeInFixedTime(animDatas[animIndex].AnimState, 0.1f);
                 localeID.gameObject.GetComponent<CharacterController>().enabled = false;
                 localeID.gameObject.GetComponent<PlayerInput>().enabled = false;
                 localeID.gameObject.GetComponent<ThirdPersonController>().enabled = false;
 
                 yield return new WaitForSeconds(animTime);
-                Debug.Log("AnimStop");
-                //animator.SetBool(_greetAnimID, false);
-                animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
 
+                animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
                 localeID.gameObject.GetComponent<CharacterController>().enabled = true;
                 localeID.gameObject.GetComponent<PlayerInput>().enabled = true;
                 localeID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
             }
-
-            localeID.gameObject.GetComponent<PlayerNetworkBehaviour>().WaitCanvas.gameObject.SetActive(false);
-
-            CmdGreetAnim(idNetwork, locID, animID);
+            localeID.gameObject.GetComponent<UiCanvas>().WaitCanvas.gameObject.SetActive(false);
+            CmdAnimation(idNetwork, locID, animIndex);
         }
 
+        // Function to call animation for other client, also change to rotation of other client game object
         [TargetRpc]
-        void RpcLocaleClapAnime(NetworkIdentity localeID, int animID)
-        {
-            Debug.Log("Locale Anim");
-            //this.gameObject.transform.position = varSpawn;
-            localeID.gameObject.GetComponent<Transform>().position = newVar;
-            localeID.gameObject.GetComponent<Transform>().rotation = newRot;
-
-            StartCoroutine(animTimePlay(countAnimTime));
-
-            IEnumerator animTimePlay(float animTime)
-            {
-                //animator.SetBool(_greetAnimID, true);
-                animator.CrossFadeInFixedTime("Clapping" , 0.1f);
-
-                localeID.gameObject.GetComponent<CharacterController>().enabled = false;
-                localeID.gameObject.GetComponent<PlayerInput>().enabled = false;
-                localeID.gameObject.GetComponent<ThirdPersonController>().enabled = false;
-
-                yield return new WaitForSeconds(animTime);
-                Debug.Log("AnimStop");
-                //animator.SetBool(_greetAnimID, false);
-                animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
-
-                localeID.gameObject.GetComponent<CharacterController>().enabled = true;
-                localeID.gameObject.GetComponent<PlayerInput>().enabled = true;
-                localeID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
-            }
-
-            localeID.gameObject.GetComponent<PlayerNetworkBehaviour>().WaitCanvas.gameObject.SetActive(false);
-            CmdClapAnim(idNetwork, locID, animID);
-        }
-
-        [TargetRpc]
-        void RpcLocaleDanceAnim(NetworkIdentity localeID, int animID)
-        {
-            Debug.Log("Locale Anim");
-            //this.gameObject.transform.position = varSpawn;
-            localeID.gameObject.GetComponent<Transform>().position = newVar;
-            localeID.gameObject.GetComponent<Transform>().rotation = newRot;
-
-            StartCoroutine(animTimePlay(countAnimTime));
-
-            IEnumerator animTimePlay(float animTime)
-            {
-                //animator.SetBool(_greetAnimID, true);
-                animator.CrossFadeInFixedTime("Dance" , 0.1f);
-
-                localeID.gameObject.GetComponent<CharacterController>().enabled = false;
-                localeID.gameObject.GetComponent<PlayerInput>().enabled = false;
-                localeID.gameObject.GetComponent<ThirdPersonController>().enabled = false;
-
-                yield return new WaitForSeconds(animTime);
-                Debug.Log("AnimStop");
-                //animator.SetBool(_greetAnimID, false);
-                animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
-
-                localeID.gameObject.GetComponent<CharacterController>().enabled = true;
-                localeID.gameObject.GetComponent<PlayerInput>().enabled = true;
-                localeID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
-            }
-
-            localeID.gameObject.GetComponent<PlayerNetworkBehaviour>().WaitCanvas.gameObject.SetActive(false);
-            CmdDanceAnim(idNetwork, locID, animID);
-        }
-
-        [TargetRpc]
-        void RpcGreetAnimator(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID, int animID)
+        void RpcAnimator(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID, int animindex)
         {
             localeID.gameObject.GetComponent<Transform>().position = newVar;
             localeID.gameObject.GetComponent<Transform>().rotation = newRot;
@@ -749,512 +307,324 @@ namespace StarterAssets
 
             IEnumerator animTimePlay(float animTime)
             {
-                //networkID.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, true);
-                networkID.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Greeting" , 0.1f);
-
+                networkID.gameObject.GetComponent<Animator>().CrossFadeInFixedTime(animDatas[animindex].AnimState, 0.1f);
                 networkID.gameObject.GetComponent<CharacterController>().enabled = false;
                 networkID.gameObject.GetComponent<PlayerInput>().enabled = false;
                 networkID.gameObject.GetComponent<ThirdPersonController>().enabled = false;
 
                 yield return new WaitForSeconds(animTime);
 
-                Debug.Log("TestDemoAnimStop");
-
-                //networkID.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
                 networkID.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
-
                 networkID.gameObject.GetComponent<CharacterController>().enabled = true;
                 networkID.gameObject.GetComponent<PlayerInput>().enabled = true;
                 networkID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
-
             }
-            //Debug.Log("Test Anim Client");
-            //TestCommand();
         }
-
-        [TargetRpc]
-        void RpcClapAnimator(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID, int animID)
+        
+        // Call Command Function to play Couple Animation
+        public void YesAnswer()
         {
-            localeID.gameObject.GetComponent<Transform>().position = newVar;
-            localeID.gameObject.GetComponent<Transform>().rotation = newRot;
-
-            networkID.gameObject.GetComponent<Transform>().rotation = targetRot;
-
-            StartCoroutine(animTimePlay(countAnimTime));
-
-            IEnumerator animTimePlay(float animTime)
-            {
-                //networkID.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, true);
-                networkID.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Clapping" , 0.1f);
-
-                networkID.gameObject.GetComponent<CharacterController>().enabled = false;
-                networkID.gameObject.GetComponent<PlayerInput>().enabled = false;
-                networkID.gameObject.GetComponent<ThirdPersonController>().enabled = false;
-
-                yield return new WaitForSeconds(animTime);
-
-                Debug.Log("TestDemoAnimStop");
-
-                //networkID.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
-                networkID.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
-
-                networkID.gameObject.GetComponent<CharacterController>().enabled = true;
-                networkID.gameObject.GetComponent<PlayerInput>().enabled = true;
-                networkID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
-
-            }
-            //Debug.Log("Test Anim Client");
-            //TestCommand();
+            CmDAnimPlay(varIndex);
         }
 
-        [TargetRpc]
-        void RpcDanceAnimator(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID, int animID)
-        {
-            localeID.gameObject.GetComponent<Transform>().position = newVar;
-            localeID.gameObject.GetComponent<Transform>().rotation = newRot;
-
-            networkID.gameObject.GetComponent<Transform>().rotation = targetRot;
-
-            StartCoroutine(animTimePlay(countAnimTime));
-
-            IEnumerator animTimePlay(float animTime)
-            {
-                //networkID.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, true);
-                networkID.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Dance" , 0.1f);
-
-                networkID.gameObject.GetComponent<CharacterController>().enabled = false;
-                networkID.gameObject.GetComponent<PlayerInput>().enabled = false;
-                networkID.gameObject.GetComponent<ThirdPersonController>().enabled = false;
-
-                yield return new WaitForSeconds(animTime);
-
-                Debug.Log("TestDemoAnimStop");
-
-                //networkID.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
-                networkID.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
-
-                networkID.gameObject.GetComponent<CharacterController>().enabled = true;
-                networkID.gameObject.GetComponent<PlayerInput>().enabled = true;
-                networkID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
-
-            }
-            //Debug.Log("Test Anim Client");
-            //TestCommand();
-        }
-
-        [Command(requiresAuthority = false)]
-        void TestCommand()
-        {
-            //yesReq = false;
-            RpcTestCommand();
-        }
-
-        [TargetRpc]
-        void RpcTestCommand()
-        {
-            Debug.Log("Test Command");
-            //yesReq = false;
-        }
-
-        public void yesGreetAnswer()
-        {
-            Debug.Log("You are agree");
-
-            CmdGreetAnimPlay(animationID);
-            //CmdAnim(idNetwork);
-        }
-
-        public void yesClapAnswer()
-        {
-            Debug.Log("You are agree");
-            CmdClapAnimPlay(animationID);
-        }
-
-        public void yesDanceAnswer()
-        {
-            Debug.Log("You are agree");
-            CmdDanceAnimPlay(animationID);
-        }
-
+        // Call Command Function if client don't want ro play Couple Animation
         public void noAnswer()
         {
-            Debug.Log("No agree");
-
             NoPlay();
         }
 
+        // Command Function to call Rpc function for cancel the request
         [Command(requiresAuthority = false)]
         void NoPlay()
         {
-            Debug.Log("Test No");
-            //uint objId = GetComponent<NetworkIdentity>().netId;
             NetworkIdentity localePlay = NetworkServer.spawned[locID];
-
             RpcNoPlay(localePlay.connectionToClient, localePlay);
         }
 
-        [TargetRpc]
-        void RpcNo(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID)
-        {
-            localeID.gameObject.GetComponent<CharacterController>().enabled = true;
-            localeID.gameObject.GetComponent<PlayerInput>().enabled = true;
-            localeID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
-
-            //inputPref.gameObject.SetActive(false);
-        }
-
+        // Command Function to call the animation using the data that was successfully obtained from the animation manager for locale player in server side 
         [Command(requiresAuthority = false)]
-        void CmdGreetAnimPlay(int animID)
+        void CmDAnimPlay(int animIndex)
         {
             NetworkIdentity localePlay = NetworkServer.spawned[locID];
-
             StartCoroutine(animTimePlay(countAnimTime));
 
             IEnumerator animTimePlay(float animTime)
             {
-                animator.CrossFadeInFixedTime("Greeting" , 0.1f);
-
+                animator.CrossFadeInFixedTime(animDatas[animIndex].AnimState, 0.1f);
                 yield return new WaitForSeconds(animTime);
-
-                //animator.SetBool(_greetAnimID, false);
                 animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
-                //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
             }
-            RpcLocaleGreetAnim(localePlay, animID);
+            RpclocalAnimPlay(localePlay, animIndex);
         }
 
-        [Command(requiresAuthority = false)]
-        void CmdClapAnimPlay(int animID)
-        {
-            NetworkIdentity localePlay = NetworkServer.spawned[locID];
-
-            StartCoroutine(animTimePlay(countAnimTime));
-
-            IEnumerator animTimePlay(float animTime)
-            {
-                animator.CrossFadeInFixedTime("Clapping" , 0.1f);
-
-                yield return new WaitForSeconds(animTime);
-
-                //animator.SetBool(_greetAnimID, false);
-                animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
-                //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
-            }
-            //RpcLocaleGreetAnim(localePlay, animID);
-            RpcLocaleClapAnime(localePlay, animID);
-        }
-
-        [Command(requiresAuthority = false)]
-        void CmdDanceAnimPlay(int animID)
-        {
-            NetworkIdentity localePlay = NetworkServer.spawned[locID];
-
-            StartCoroutine(animTimePlay(countAnimTime));
-
-            IEnumerator animTimePlay(float animTime)
-            {
-                animator.CrossFadeInFixedTime("Dance" , 0.1f);
-
-                yield return new WaitForSeconds(animTime);
-
-                //animator.SetBool(_greetAnimID, false);
-                animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
-                //opponentId.gameObject.GetComponent<Animator>().SetBool(_greetAnimID, false);
-            }
-            //RpcLocaleGreetAnim(localePlay, animID);
-            RpcLocaleDanceAnim(localePlay, animID);
-        }
-
+        // Rpc Function to enable local client control and close wait canvas in locale client
         [TargetRpc]
         void RpcNoPlay(NetworkConnectionToClient netConID, NetworkIdentity localeID)
         {
-            Debug.Log("Locale opt");
-
             localeID.gameObject.GetComponent<CharacterController>().enabled = true;
             localeID.gameObject.GetComponent<PlayerInput>().enabled = true;
             localeID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
-            localeID.gameObject.GetComponent<PlayerNetworkBehaviour>().WaitCanvas.gameObject.SetActive(false);
+            localeID.gameObject.GetComponent<UiCanvas>().WaitCanvas.gameObject.SetActive(false);
 
-            //yesReq = true;
-            //CmdAnim(idNetwork);
             CmdSetUpNo(idNetwork);
         }
 
+        // Command function to call RPC Function to enable other player control
         [Command]
         void CmdSetUpNo(uint objectIdentity)
         {
-            Debug.Log("Test Anim");
             uint objId = GetComponent<NetworkIdentity>().netId;
-
             objId = objectIdentity;
-
             NetworkIdentity opponentId = NetworkServer.spawned[objectIdentity];
-
             RpcNoPlayClient(opponentId.connectionToClient, objId, opponentId);
         }
 
-        void ButtonActivate()
-        {
-            isButtonActive = true;
-        }
-
-        void ButtonDeactivated()
-        {
-            //Destroy(GameObject.FindGameObjectWithTag("ButtonInst"));
-            GameObject[] btnTarget = GameObject.FindGameObjectsWithTag("ButtonInst");
-            foreach (GameObject btnDestroyed in btnTarget)
-            GameObject.Destroy(btnDestroyed);
-        }
-
-        public void GreetButton()
-        {
-            Debug.Log("Test Greet");
-            //animator.CrossFadeInFixedTime(animationData[animIndex].AnimState, 0.1f);
-            animID = 1;
-            ButtonDeactivated();
-            CmdLocaleAnimPanel(localID);
-            CmdGreetPanel(idNet, animID);
-        }
-
-        public void ClapButton()
-        {
-            Debug.Log("Test Clap");
-            //animator.CrossFadeInFixedTime(animationData[animIndex].AnimState, 0.1f);
-            animID = 2;
-            ButtonDeactivated();
-            CmdLocaleAnimPanel(localID);
-            CmdGreetPanel(idNet, animID);
-        }
-
-        public void DanceBUtton()
-        {
-            Debug.Log("Test Dance");
-            //animator.CrossFadeInFixedTime(animationData[animIndex].AnimState, 0.1f);
-            animID = 3;
-            ButtonDeactivated();
-            CmdLocaleAnimPanel(localID);
-            CmdGreetPanel(idNet, animID);
-        }
-
-        [Command]
-        void CmdGreetPanel(uint idNet, int ID)
-        {
-            NetworkIdentity otherClientID = NetworkServer.spawned[idNet];
-
-            RpcGreetPanel(otherClientID.connectionToClient, otherClientID, ID);
-        }
-
-        [TargetRpc]
-        void RpcGreetPanel(NetworkConnectionToClient otherID, NetworkIdentity otherClientID, int ID)
-        {
-            if (ID == 1)
-            {
-                WaitCanvas.gameObject.SetActive(false);
-                RequestCanvas.gameObject.SetActive(true);
-            }
-
-            if (ID == 2)
-            {
-                WaitCanvas.gameObject.SetActive(false);
-                ClapRequestCanvas.gameObject.SetActive(true);
-            }
-
-            if (ID == 3)
-            {
-                WaitCanvas.gameObject.SetActive(false);
-                DanceRequestCanvas.gameObject.SetActive(true);
-            }
-        }
-
-        [Command]
-        void CmdLocaleAnimPanel(uint localeID)
-        {
-            NetworkIdentity localePlayer = NetworkServer.spawned[localeID];
-
-            RpcLocaleAnimPanel(localePlayer.connectionToClient, localePlayer);
-        }
-
-        [TargetRpc]
-        void RpcLocaleAnimPanel(NetworkConnectionToClient netCon, NetworkIdentity netID)
-        {
-            netID.gameObject.GetComponent<PlayerNetworkBehaviour>().AnimationCanvas.gameObject.SetActive(false);
-            netID.gameObject.GetComponent<PlayerNetworkBehaviour>().WaitCanvas.gameObject.SetActive(true);
-        }
-
+        // Command function to call RPC function for disable control and open the animation canvas in local player
         [Command]
         public void CmdSelf(uint localID)
         {
             NetworkIdentity localeID = NetworkServer.spawned[localID];
-
             uint idLocale = localID;
-
             RpcSelf(localeID.connectionToClient, localeID, idLocale);
         }
 
+        // Open animation canvas and disable the local player control
         [TargetRpc]
         void RpcSelf(NetworkConnectionToClient networkID, NetworkIdentity netID, uint localeID)
         {
-            netID.gameObject.GetComponent<PlayerNetworkBehaviour>().AnimationCanvas.gameObject.SetActive(true);
-            
+            netID.gameObject.GetComponent<UiCanvas>().AnimationCanvas.gameObject.SetActive(true);
+            netID.gameObject.GetComponent<CharacterController>().enabled = false;
+            netID.gameObject.GetComponent<PlayerInput>().enabled = false;
+            netID.gameObject.GetComponent<ThirdPersonController>().enabled = false;
             netID.gameObject.GetComponent<PlayerNetworkBehaviour>().animManager.SpawnButton();
+
+            locID = localeID;
         }
 
+        // Enable client control for other client
         [TargetRpc]
         void RpcNoPlayClient(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID)
         {
-            //Debug.Log("Test Anim Client");
             networkID.gameObject.GetComponent<CharacterController>().enabled = true;
             networkID.gameObject.GetComponent<PlayerInput>().enabled = true;
             networkID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
-            networkID.gameObject.GetComponent<PlayerNetworkBehaviour>().WaitCanvas.gameObject.SetActive(false);
-
-            Debug.Log("Test Anim Client ");
+            //networkID.gameObject.GetComponent<UiCanvas>().WaitCanvas.gameObject.SetActive(false);
         }
 
+        // Changing the mask makes the client only able to interact with objects with the same mask
         private void FixedUpdate()
         {
             mask = LayerMask.GetMask("Player");
         }
 
+        // Get network ID
         void OnChangeID(uint oldID, uint newID)
         {
             idNetwork = newID;
         }
 
-        public void SelfieButton()
+        // Call Command Function to open group selfie canvas
+        public void SelfieButtonFunc()
         {
             if (isLocalPlayer)
             {
-                Debug.Log("Is Local Player");
-
                 localeSelfieID = this.gameObject.GetComponent<NetworkIdentity>().netId;
-                otherClients = this.gameObject.GetComponent<NetworkIdentity>().netId;
                 CmdSelfieLocalePanel(localeSelfieID);
-                //localIDchange = true;
-                CmdAllCLientAccess(otherClients);
-                //CmdSelfiePos(localeSelfieID);
             }
         }
-
-        [Command]
-        void CmdAllCLientAccess(uint allClientAcc)
+        
+        // Function to call Ommand Function to Close Group Selfie
+        public void CloseSelfieGroup()
         {
-            gameObject.GetComponent<PlayerNetworkBehaviour>().clientSelfID = allClientAcc;
-
-            RpcAllClientAccess(clientSelfID, clientSelfID);
-        }
-
-        [ClientRpc]
-        private void RpcAllClientAccess(uint oldID, uint clientID)
-        {
-            //clientSelfID = allNetID.gameObject.GetComponent<PlayerNetworkBehaviour>().otherClients;
-            gameObject.GetComponent<PlayerNetworkBehaviour>().othersPosID = clientID;
+            if (isLocalPlayer)
+            {
+                localeSelfieID = this.gameObject.GetComponent<NetworkIdentity>().netId;
+                CmdSlefieCloselocalePanel(localeSelfieID);
+            }
         }
         
-        [Command(requiresAuthority = false)]
-        void CmdSelfiePos(uint localID)
-        {
-            forOtherClientSelfieID = localID;
-
-            RpcSelfiePos(forOtherClientSelfieID);
-        }
-
-        [ClientRpc]
-        void RpcSelfiePos(uint ID)
-        {
-            forOtherClientSelfieID = ID;
-        }
-
+        // Command function to call RPC function for open the selfie froup canvas.
         [Command]
         void CmdSelfieLocalePanel(uint localNetID)
         {
             NetworkIdentity localeNetID = NetworkServer.spawned[localNetID];
-
-            //RpcSelfieLocal(localeNetID.connectionToClient, localeNetID);
+            localeNetID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 0;
             RpcSelfieLocal(localeNetID.connectionToClient, localeNetID);
         }
         
+
+        // Command function to call RPC function for closing the group selfie
+        [Command]
+        void CmdSlefieCloselocalePanel(uint localNetID)
+        {
+            NetworkIdentity localeNetID = NetworkServer.spawned[localNetID];
+            localeNetID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 2;
+            RpcSelfieLocalClose(localeNetID.connectionToClient, localeNetID);
+        }
+        
+        // Call RPC function to display Selfie Panel from Server
         [Command]
         void CmdSelfiePanelOther(NetworkIdentity localId)
         {
             RpcPanelSelfie(localId);
         }
-
+        
+        // Call RPC function to closse Selfie Panel from Server
+        [Command]
+        void CmdClosePanelOther(NetworkIdentity localId)
+        {
+            RpcPanelSelfieClose(localId);
+        }
+        
+        // Open selfie group panel in local player and disable client move
         [TargetRpc]
         void RpcSelfieLocal(NetworkConnectionToClient netConID, NetworkIdentity localNetID)
         {
-            localNetID.gameObject.GetComponent<PlayerNetworkBehaviour>().SelfieCanvas.gameObject.SetActive(true);
-            //SelfieCanvas.gameObject.SetActive(true);
-            joinButtonCanvas.gameObject.SetActive(false);
+            localNetID.gameObject.GetComponent<UiCanvas>().SelfieCanvas.gameObject.SetActive(true);
+            localNetID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 0;
+            uiCanvasObj.joinButtonCanvas.gameObject.SetActive(false);
             CmdSelfiePanelOther(localNetID);
         }
-
+        
+        // Close selfie group and enable client move
         [TargetRpc]
-        void RpcOtherPanel(NetworkConnectionToClient netConID, NetworkIdentity netID, NetworkIdentity localeID)
+        void RpcSelfieLocalClose(NetworkConnectionToClient netConID, NetworkIdentity localNetID)
         {
-            localeID.gameObject.GetComponent<PlayerNetworkBehaviour>().SelfieCanvas.gameObject.SetActive(true);
+            localNetID.gameObject.GetComponent<UiCanvas>().SelfieCanvas.gameObject.SetActive(false);
+            localNetID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 2;
+            uiCanvasObj.joinButtonCanvas.gameObject.SetActive(true);
+            CmdClosePanelOther(localNetID);
         }
-
+        
+        // Display locale client selfie panel to all others client
         [ClientRpc]
         void RpcPanelSelfie(NetworkIdentity localeID)
         {
-            localeID.gameObject.GetComponent<PlayerNetworkBehaviour>().SelfieCanvas.gameObject.SetActive(true);
+            localeID.gameObject.GetComponent<UiCanvas>().SelfieCanvas.gameObject.SetActive(true);
+
             if (isLocalPlayer)
             {
-                joinButtonCanvas.gameObject.SetActive(false);
+                uiCanvasObj.joinButtonCanvas.gameObject.SetActive(false);
+                //ExitButton.gameObject.SetActive(true);
+            }
+        }
+        
+        // Close selfie canvas for local client
+        [ClientRpc]
+        void RpcPanelSelfieClose(NetworkIdentity localeID)
+        {
+            YesExit();
+            localeID.gameObject.GetComponent<UiCanvas>().SelfieCanvas.gameObject.SetActive(false);
+        }
+        
+
+        // Change indez for clients for join the group selfie
+        void ChangeIndexNum()
+        {
+            GameObject[] playerTarget = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject playerNum in playerTarget)
+            {
+                playerNum.gameObject.GetComponent<PlayerNetworkBehaviour>().selfiePosIndex++;
             }
         }
 
-        public void JoinSelfie()
-        {
-            SelfieReqPanel.gameObject.SetActive(true);
-            testID = gameObject.GetComponent<NetworkIdentity>().netId;
-
-            Debug.Log("Selfie Test");
-            //CmdSelfieReqPanel(startID);
-        }
-
-        [Command(requiresAuthority = false)]
-        void CmdSelfieReqPanel(uint otherID)
-        {
-            NetworkIdentity otherClientID = NetworkServer.spawned[otherID];
-
-            RpcSelfieReqPanel(otherClientID.connectionToClient, otherClientID);
-        }
-
-        [TargetRpc]
-        void RpcSelfieReqPanel(NetworkConnectionToClient netConID, NetworkIdentity netOtherID)
-        {
-            netOtherID.gameObject.GetComponent<PlayerNetworkBehaviour>().SelfieReqPanel.gameObject.SetActive(true);
-        }
-
+        // Call function after client agree to join Group Selfie
         public void YesJoin()
         {
-            SelfieReqPanel.gameObject.SetActive(false);
-            otherClientIDs = this.gameObject.GetComponent<NetworkIdentity>().netId;
-            CmdYesjoin(otherClientIDs, othersPosID);
+            uiCanvasObj.SelfieReqPanel.gameObject.SetActive(false);
+
+            otherClientIDs = NetworkClient.localPlayer.gameObject.GetComponent<NetworkIdentity>().netId;
+            GameObject thisObject = NetworkClient.localPlayer.gameObject;
+            CmdYesjoin(otherClientIDs, testClientID);
         }
 
-        [Command(requiresAuthority = false)]
+        // Call function after client want to ext the Group Selfie
+        public void YesExit()
+        {
+            uiCanvasObj.ExitRequestPanel.gameObject.SetActive(false);
+            otherClientIDs = NetworkClient.localPlayer.gameObject.GetComponent<NetworkIdentity>().netId;
+            GameObject thisObject = NetworkClient.localPlayer.gameObject;
+            CmdExitGroup(otherClientIDs, testClientID);
+        }
+
+        // Command Function to change position and rotation in Server Side
+        [Command]
         void CmdYesjoin(uint corePosID, uint centerPosID)
         {
-            Debug.Log("Tes Connect");
-
             NetworkIdentity localID = NetworkServer.spawned[corePosID];
-            
             NetworkIdentity posID = NetworkServer.spawned[centerPosID];
-            Debug.Log("Test Local");
+            //localID.GetComponent<PlayerNetworkBehaviour>().changePos = true;
 
-            localID.gameObject.GetComponent<Transform>().position = posID.gameObject.GetComponent<PlayerNetworkBehaviour>().pointNewPos;
-            //Vector3 newPos = new Vector3(localID.gameObject.GetComponent<PlayerNetworkBehaviour>().)
+            localID.gameObject.GetComponent<Transform>().position = posID.gameObject.GetComponent<PlayerNetworkBehaviour>().selfiePos[selfiePosIndex].transform.position;
+            localID.gameObject.GetComponent<Transform>().rotation = posID.gameObject.GetComponent<Transform>().rotation;
+
+            localID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 0;
             RpcYesJoin(localID.connectionToClient, localID, posID);
         }
 
+        // Command function to cal RPC funtion for exit the group and enable client move in server side
+        [Command(requiresAuthority = false)]
+        void CmdExitGroup(uint corePosID, uint centerPosID)
+        {
+            NetworkIdentity localID = NetworkServer.spawned[corePosID];
+            NetworkIdentity posID = NetworkServer.spawned[centerPosID];
+
+            localID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 2;
+            RpcYesExitGroup(localID.connectionToClient, localID, posID);
+        }
+
+        // RPC Function to change / transform position and rotation in Client Side
         [TargetRpc]
         void RpcYesJoin(NetworkConnectionToClient netConID, NetworkIdentity netID, NetworkIdentity localPosID)
         {
-            //Vector3 currentPos = gameObject.GetComponent<Transform>().position;
-            netID.gameObject.GetComponent<Transform>().position = localPosID.gameObject.GetComponent<PlayerNetworkBehaviour>().pointNewPos;
+            //netID.GetComponent<PlayerNetworkBehaviour>().changePos = true;
+            uiCanvasObj.buttonSelfieCanvas.gameObject.SetActive(false);
+            
+            netID.gameObject.GetComponent<Transform>().position = localPosID.gameObject.GetComponent<PlayerNetworkBehaviour>().selfiePos[selfiePosIndex].transform.position;
+            netID.gameObject.GetComponent<Transform>().rotation = localPosID.gameObject.GetComponent<Transform>().rotation;
+
+            if (isLocalPlayer)
+            {
+                localPosID.gameObject.GetComponent<UiCanvas>().joinButtonCanvas.gameObject.SetActive(false);
+                localPosID.gameObject.GetComponent<UiCanvas>().ExitButton.gameObject.SetActive(true);
+            }
+
+            netID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 0;
+            CmdChangeIndex(netID, localPosID);
+            //ChangeIndexNum();
+        }
+
+        // Enable clients control after choosing to exit the group selfie, also aneble the selfie button and join button
+        [TargetRpc]
+        void RpcYesExitGroup(NetworkConnectionToClient netConID, NetworkIdentity netID, NetworkIdentity localPosID)
+        {
+            uiCanvasObj.buttonSelfieCanvas.gameObject.SetActive(true);
+            
+            if (isLocalPlayer)
+            {
+                localPosID.gameObject.GetComponent<UiCanvas>().joinButtonCanvas.gameObject.SetActive(true);
+                localPosID.gameObject.GetComponent<UiCanvas>().ExitButton.gameObject.SetActive(false);
+            }
+            netID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 2;
+        }
+
+        // Command Function to call function to change Index foe Group Selfie
+        [Command]
+        void CmdChangeIndex(NetworkIdentity netID, NetworkIdentity localID)
+        {
+            ChangeIndexNum();  
+        }
+        
+        // Debug log this player Index
+        void RpcChangeIndex(int oldValue, int newValue)
+        {
+            Debug.Log("Your new Index is : " + newValue);
+        }
+
+        public void MaxIndex()
+        {
+            uiCanvasObj.joinButtonCanvas.gameObject.SetActive(false);
+            isMax = false;
         }
 
         // Update is called once per frame
@@ -1262,30 +632,20 @@ namespace StarterAssets
         {
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = 100f;
-
-            newSelfiePos = gameObject.GetComponent<PlayerNetworkBehaviour>().selfiePos1.gameObject.transform.position;
-            //newSelfirPos2 = GetComponent<PlayerNetworkBehaviour>().selfiePos2.transform.position;
-            pointNewPos = new Vector3(newSelfiePos.x, newSelfiePos.y, newSelfiePos.z);
-
-            _hasAnimator = TryGetComponent(out animator);
-            idNetwork = idNet;
-            animationID = animID;
             
-            if (isLocalPlayer)
-            {
-                startID = this.gameObject.GetComponent<NetworkIdentity>().netId;
+            if (selfiePosIndex > maxIndex)
+            { 
+                selfiePosIndex = maxIndex;
+                isMax = true;
+                if (isMax == true)
+                {
+                    MaxIndex();
+                }
             }
-
-            if (isButtonActive == true && inputButton == null)
-            {
-                inputButton = GameObject.FindGameObjectWithTag("InputButton").GetComponent<Button>();
-
-                inputButton.onClick.AddListener(() => InputName());
-                isButtonActive = false;
-            }
-
-            requestPanel = GameObject.FindGameObjectWithTag("Request");
-
+            
+            //_hasAnimator = TryGetComponent(out animator);
+            idNetwork = idNet;
+            //animationID = animID;
             playName = inputData.InputText;
 
             if (isLocalPlayer && Input.GetMouseButtonDown(0))
@@ -1293,137 +653,30 @@ namespace StarterAssets
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
-                //target = GameObject.FindGameObjectWithTag("Player");
                 if (Physics.Raycast(ray, out hit, 100, mask))
                 {
-                    //requestPanel.gameObject.SetActive(true);
-                    //Debug.Log("Testing");
                     objectID = GameObject.Find(hit.transform.gameObject.name);
-                    
                     idNet = objectID.GetComponent<NetworkIdentity>().netId;
                     localID = this.gameObject.GetComponent<NetworkIdentity>().netId;
-                    //transLoc = objectID.GetComponent<Transform>();
-
+                    
                     SpawnVar = objectID.gameObject.GetComponent<Transform>().position;
                     locRot = objectID.gameObject.GetComponent<Transform>().rotation;
 
-                    //SpawnVar = new Vector3(newVar.x, newVar.y, newVar.z);
                     newVar = new Vector3(SpawnVar.x, SpawnVar.y, SpawnVar.z + 0.75f);
                     newRot = new Quaternion(locRot.x, locRot.y + 180f, locRot.z, locRot.w);
 
                     OnChangeID(idNetwork, idNet);
                     CmdSelf(localID);
                     CmdClick(idNet, newVar, localID, newRot);
-                    LocaleCmd(localID);
+                    //LocaleCmd(localID);
                 }
             }
-
-            if (isServer && Input.GetMouseButtonDown(0))
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                //target = GameObject.FindGameObjectWithTag("Player");
-                if (Physics.Raycast(ray, out hit, 100, mask))
-                {
-                    //Debug.Log("Testing");
-                    objectID = GameObject.Find(hit.transform.name);                                     
-                    //CmdClick(objectID);
-                    StopClient(objectID);
-                }
-            }
-            /*
-            if (isLocalPlayer && Input.GetKeyDown(KeyCode.T))
-            {
-                netID = networkId;
-            }
-
-            if (isLocalPlayer && Input.GetKeyDown(KeyCode.Q))
-            {
-                TestConnectCmd();
-            }
-
-            if (isLocalPlayer && Input.GetKeyDown(KeyCode.E))
-            {
-                TestConnectAllCmd();
-            }
-
-            if (isLocalPlayer && Input.GetKeyDown(KeyCode.Z))
-            {
-                GetHelloCmd();
-            }
-
-            if (isLocalPlayer && Input.GetKeyDown(KeyCode.X))
-            {
-                GetScore();
-            }
-
-            if (isLocalPlayer && Input.GetKeyDown(KeyCode.V))
-            {
-                animator.SetBool("Greeting", true);
-            }
-
-            if (isLocalPlayer && Input.GetKeyDown(KeyCode.F))
-            {
-                LoseHealthCommand();
-            }
-
-            if (isLocalPlayer && Input.GetKeyDown(KeyCode.H))
-            {
-                ChatCmd(networkId);
-            }
-            */
+            
             if (isLocalPlayer && Input.GetKeyDown(KeyCode.K))
             {
-                AnimationCanvas.gameObject.SetActive(true);
+                uiCanvasObj.AnimationCanvas.gameObject.SetActive(true);
                 this.gameObject.GetComponent<PlayerNetworkBehaviour>().animManager.SpawnButton();
             }
-
-            if (isServer)
-            {
-                ReceiveCongrats();
-                ReceiveDefeat();
-            }
-
-            if (isServer && Input.GetKeyDown(KeyCode.M))
-            {
-                ActivateSphere();
-            }
-
-            if (isLocalPlayer && Input.GetKeyDown(KeyCode.Y))
-            {
-                CmdSpawnItem();
-            }
-
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                if (isLocalPlayer)
-                {
-                    inputName = inputData.InputText;
-
-                    playName = inputName;
-
-                    Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-
-                    CmdSetupPlayer(playName, color);
-                }
-            }
-            /*
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                if (isLocalPlayer)
-                {
-                    playName = inputName;
-                    Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-
-                    CmdSetupPlayer(playName, color);
-                }
-            }
-            */
-            floatingInfo.transform.LookAt(Camera.main.transform);
-            SelfieCanvas.transform.LookAt(Camera.main.transform);
         }
     }
 }
-
-

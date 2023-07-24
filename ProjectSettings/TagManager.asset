@@ -11,6 +11,7 @@ TagManager:
   - ToggleButton
   - ButtonInst
   - AnimateManager
+  - OtherPlayer
   layers:
   - Default
   - TransparentFX

@@ -16,7 +16,7 @@ namespace StarterAssets
             objectColor = new Color(Random.value, Random.value, Random.value, Random.value);
             gimObject = this.gameObject;
 
-            NetworkClient.localPlayer.GetComponent<PlayerNetworkBehaviour>().CmdChangeColor(gimObject, objectColor);
+            //NetworkClient.localPlayer.GetComponent<PlayerNetworkBehaviour>().CmdChangeColor(gimObject, objectColor);
         }
     }
 }

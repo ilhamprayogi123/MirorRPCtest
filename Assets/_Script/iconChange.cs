@@ -22,6 +22,6 @@ public class iconChange : MonoBehaviour
     public void ButtonInput(int index)
     {
         //iconImage.sprite = animationData[index].iconImage;
-        gameObject.GetComponentInChildren<Image>().sprite = animationData[index].iconImage;
+        //gameObject.GetComponentInChildren<Image>().sprite = animationData[index].iconImage;
     }
 }

@@ -8,7 +8,7 @@ public class CoupleAnimationData : ScriptableObject
 {
     public int animateID;
     public string AnimState;
-    public Sprite iconImage;
+    //public Sprite iconImage;
     public Button button;
     //public List<AnimData> dataAnimation;
 }
