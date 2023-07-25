@@ -9,6 +9,8 @@ public class ButtonScript : MonoBehaviour
 {
     [SerializeField]
     private PlayerNetworkBehaviour playerNetBehave;
+    [SerializeField]
+    private GameObjectScript gameObjectScript;
 
     [SerializeField]
     private UiCanvas uiCanvasObj;
@@ -16,8 +18,9 @@ public class ButtonScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        uiCanvasObj.SelfieCanvas.gameObject.SetActive(false);
-        uiCanvasObj.ExitButton.gameObject.SetActive(false);
-        
+        //uiCanvasObj.SelfieCanvas.gameObject.SetActive(false);
+        gameObjectScript.SelfieCanvas.gameObject.SetActive(false);
+        //uiCanvasObj.ExitButton.gameObject.SetActive(false);
+        gameObjectScript.ExitButton.gameObject.SetActive(false);
     }
 }

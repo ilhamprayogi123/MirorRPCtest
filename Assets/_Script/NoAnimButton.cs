@@ -17,7 +17,8 @@ namespace StarterAssets
             //mainPlayer = GameObject.FindGameObjectWithTag("Player");
             btnAct = this.gameObject.GetComponent<Button>();
 
-            btnAct.onClick.AddListener(() => thisButton.gameObject.GetComponent<PlayerNetworkBehaviour>().noAnswer());
+            //btnAct.onClick.AddListener(() => thisButton.gameObject.GetComponent<PlayerNetworkBehaviour>().noAnswer());
+            btnAct.onClick.AddListener(() => thisButton.gameObject.GetComponent<AnimScript>().noAnswer());
         }
     }
 }

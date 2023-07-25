@@ -19,7 +19,8 @@ namespace StarterAssets
             thisButton = GetComponentInParent<PlayerNetworkBehaviour>().gameObject;
             btnAct = this.gameObject.GetComponent<Button>();
 
-            btnAct.onClick.AddListener(() => thisButton.gameObject.GetComponent<PlayerNetworkBehaviour>().YesAnswer());
+            //btnAct.onClick.AddListener(() => thisButton.gameObject.GetComponent<PlayerNetworkBehaviour>().YesAnswer());
+            btnAct.onClick.AddListener(() => thisButton.gameObject.GetComponent<AnimScript>().YesAnswer());
         }
     }
 }
