@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Linq;
 using System.Security.Cryptography;
 using UnityEngine.Networking.Types;
+using System;
 
 namespace StarterAssets
 {
@@ -30,18 +31,23 @@ namespace StarterAssets
         private UiCanvas uiCanvasObj;
         [SerializeField]
         private GameObjectScript gameObjectScript;
+        [SerializeField]
+        private GoupSelfieScript goupSelfie;
 
-        private GetButtonFunc buttonFunc;
-        
         public List<GameObject> ReqButton;
         public List<CoupleAnimationData> animDatas;
-        
-        [SyncVar]
+
+        [SyncVar(hook = nameof(RpcChangeMaxIndex))]
         public int maxIndex;
         [SyncVar]
         public int indexNum;
+        [SyncVar(hook = nameof(RpcChangeMaxIndex))]
+        public int currentIndex;
+        [SyncVar(hook = nameof(RpcChangeMaxIndex))]
+        public int loc;
 
-        private bool isMax;
+        public TMP_Text currentText;
+        public TMP_Text maxText;
         public LayerMask mask;
 
         [SerializeField] public float countAnimTime = 10.0f;
@@ -71,6 +77,10 @@ namespace StarterAssets
 
         [SyncVar(hook = nameof(RpcChangeIndex))]
         public int selfiePosIndex;
+        [SyncVar(hook = nameof(RpcChangeIndex))]
+        public int countNum;
+        [SyncVar(hook = nameof(RpcChangeIndex))]
+        public int varIndexInt;
 
         public GameObject[] selfiePos;
 
@@ -87,7 +97,6 @@ namespace StarterAssets
         // Start is called before the first frame update
         void Start()
         {
-            isMax = false;
             valueScript.localID = this.gameObject.GetComponent<NetworkIdentity>().netId;
             valueScript.locID = valueScript.localID;
 
@@ -102,6 +111,13 @@ namespace StarterAssets
 
             if (isLocalPlayer)
             {
+                GameObject localNetGameobject = NetworkClient.localPlayer.gameObject;
+
+                uint localNets = localNetGameobject.gameObject.GetComponent<NetworkIdentity>().netId;
+
+                valueScript.GroupID = Convert.ToInt32(localNets);
+
+                //valueScript.GroupID = 
                 this.gameObject.GetComponent<MeshCollider>().enabled = false;
                 playName = inputName;
 
@@ -182,12 +198,45 @@ namespace StarterAssets
         {
             Debug.Log("Your new Index is : " + newValue);
         }
-        
+
+        // Debug log this player Max Index
+        void RpcChangeMaxIndex(int oldValue, int newValue)
+        {
+            Debug.Log("Your Max Index is : " + newValue);
+        }
+
+        // Command function to update index in index panel
+        [Command(requiresAuthority = false)]
+        void CmdIndexUpdate()
+        {
+            indexPanel();
+        }
+
+        // Update max text in index panel using client Rpc
+        [ClientRpc]
+        public void indexPanel()
+        {
+            maxText.SetText(maxIndex.ToString());
+        }
+
+        // Set isMax bool to false
         public void MaxIndex()
         {
+            CmdJoinClose();
+        }
+        
+        // Cammand function to call Rpc for close the join button
+        [Command(requiresAuthority = false)]
+        void CmdJoinClose()
+        {
+            RpcJoinCLose();
+        }
+
+        // Close hoin button canvas for all client
+        [ClientRpc]
+        void RpcJoinCLose()
+        {
             gameObjectScript.joinButtonCanvas.gameObject.SetActive(false);
-            Debug.Log("Maximum Client");
-            isMax = false;
         }
 
         // Update is called once per frame
@@ -195,15 +244,47 @@ namespace StarterAssets
         {
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = 100f;
-            
-            if (selfiePosIndex > maxIndex)
-            { 
-                selfiePosIndex = maxIndex;
-                isMax = true;
-                if (isMax == true)
+
+            if (countNum > 1)
+            {
+                valueScript.readyChange = true;
+            }
+
+            if (!isServer)
+            {
+                CmdIndexUpdate();
+            }
+
+            if (countNum >= maxIndex)
+            {
+                valueScript.anySpace = false;
+                valueScript.isContinue = false;
+            }
+
+            if (valueScript.changeIndex == true)
+            {
+                if (countNum >= maxIndex)
                 {
-                    MaxIndex();
+                    valueScript.anySpace = false;
+                    valueScript.isContinue = false;
+                    valueScript.isMax = true;
+                    //saveIndex();
+                    Debug.Log("Is Full");
+
+                    if (valueScript.isMax == true)
+                    {
+                        Debug.Log("Test Debug");
+                        MaxIndex();
+                        valueScript.changeIndex = false;
+                    }
                 }
+
+                if (valueScript.anySpace == true && countNum == currentIndex)
+                {
+                    valueScript.isContinue = true;
+                    valueScript.anySpace = true;
+                }
+
             }
             
             idNetwork = valueScript.idNet;
@@ -216,20 +297,23 @@ namespace StarterAssets
 
                 if (Physics.Raycast(ray, out hit, 100, mask))
                 {
-                    objectID = GameObject.Find(hit.transform.gameObject.name);
-                    valueScript.idNet = objectID.GetComponent<NetworkIdentity>().netId;
-                    valueScript.localID = this.gameObject.GetComponent<NetworkIdentity>().netId;
+                    if (!hit.transform.gameObject.GetComponent<NetworkIdentity>().isLocalPlayer)
+                    {
+                        objectID = GameObject.Find(hit.transform.gameObject.name);
+                        valueScript.idNet = objectID.GetComponent<NetworkIdentity>().netId;
+                        valueScript.localID = this.gameObject.GetComponent<NetworkIdentity>().netId;
 
-                    posRot.SpawnVar = objectID.gameObject.GetComponent<Transform>().position;
-                    posRot.locRot = objectID.gameObject.GetComponent<Transform>().rotation;
+                        posRot.SpawnVar = objectID.gameObject.GetComponent<Transform>().position;
+                        posRot.locRot = objectID.gameObject.GetComponent<Transform>().rotation;
 
-                    posRot.newVar = new Vector3(posRot.SpawnVar.x, posRot.SpawnVar.y, posRot.SpawnVar.z + 0.75f);
-                    posRot.newRot = new Quaternion(posRot.locRot.x, posRot.locRot.y + 180f, posRot.locRot.z, posRot.locRot.w);
+                        posRot.newVar = new Vector3(posRot.SpawnVar.x, posRot.SpawnVar.y, posRot.SpawnVar.z + 0.75f);
+                        posRot.newRot = new Quaternion(posRot.locRot.x, posRot.locRot.y + 180f, posRot.locRot.z, posRot.locRot.w);
 
-                    OnChangeID(idNetwork, valueScript.idNet);
-                    animScript.CmdSelf(valueScript.localID);
-                    animScript.CmdClick(valueScript.idNet, posRot.newVar, valueScript.localID, posRot.newRot);
-                    //LocaleCmd(localID);
+                        OnChangeID(idNetwork, valueScript.idNet);
+                        animScript.CmdSelf(valueScript.localID);
+                        animScript.CmdClick(valueScript.idNet, posRot.newVar, valueScript.localID, posRot.newRot);
+                        //LocaleCmd(localID);
+                    }
                 }
             }
         }

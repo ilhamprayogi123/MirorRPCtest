@@ -9,6 +9,7 @@ namespace StarterAssets
 {
     public class CharcControl : NetworkBehaviour
     {
+        // Disable player control
         public void ControlStop()
         {
             this.gameObject.GetComponent<CharacterController>().enabled = false;
@@ -16,6 +17,7 @@ namespace StarterAssets
             this.gameObject.GetComponent<ThirdPersonController>().enabled = false;
         }
 
+        // Enable player control
         public void ControlON()
         {
             this.gameObject.GetComponent<CharacterController>().enabled = true;

@@ -11,6 +11,8 @@ namespace StarterAssets
         public Button inputButton;
         public Button ToggleButton;
 
+        public List<GameObject> unityGameObjects = new List<GameObject>();
+
         [SerializeField]
         public InputHandler inputData;
 
