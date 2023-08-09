@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// This script is used to turn on and off the input field
 public class InputHandler : MonoBehaviour
 {
     [SerializeField]

@@ -5,6 +5,7 @@ using Mirror;
 
 namespace StarterAssets
 {
+    // Change color for cube gameobject from previous task
     public class ChangeColor : NetworkBehaviour
     {
         private Color objectColor;

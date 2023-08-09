@@ -7,6 +7,7 @@ using UnityEngine.Networking.Types;
 
 namespace StarterAssets
 {
+    // This script is used to enable and disable player movement and player input.
     public class CharcControl : NetworkBehaviour
     {
         // Disable player control

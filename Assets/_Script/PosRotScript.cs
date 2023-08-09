@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace StarterAssets
 {
+    // This script is used to store position and rotation data from the client that will be used in the project.
     public class PosRotScript : NetworkBehaviour
     {
         [SyncVar]

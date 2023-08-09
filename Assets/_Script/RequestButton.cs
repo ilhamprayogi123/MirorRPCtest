@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This script is used to get data from the canvas which will be used as a place for the answer button to appear.
 public class RequestButton : MonoBehaviour
 {
     CanvasGroup _canvasGroup;
@@ -24,11 +25,5 @@ public class RequestButton : MonoBehaviour
     public void OffCanvas()
     {
         buttonCanvas.gameObject.SetActive(false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

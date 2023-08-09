@@ -6,12 +6,11 @@ using UnityEngine.UI;
 
 namespace StarterAssets
 {
+    // This script is used to store game objects for UI parts when using the Couple Animation feature
     public class GameObjectScript : NetworkBehaviour
     {
         public Button inputButton;
         public Button ToggleButton;
-
-        public List<GameObject> unityGameObjects = new List<GameObject>();
 
         [SerializeField]
         public InputHandler inputData;
@@ -19,19 +18,11 @@ namespace StarterAssets
         [SerializeField]
         public GameObject inputPrefab;
 
-        public GameObject ExitButton;
         public GameObject RequestCanvas;
 
         public GameObject WaitCanvas;
         public GameObject AnimationCanvas;
         public GameObject NoAnimCanvas;
-
-        public GameObject SelfieReqPanel;
-        public GameObject ExitRequestPanel;
-        public GameObject SelfieCanvas;
-        public GameObject joinButtonCanvas;
-        public GameObject buttonSelfieCanvas;
-        public GameObject closeSelfieCanvas;
 
         public GameObject floatingInfo;
     }

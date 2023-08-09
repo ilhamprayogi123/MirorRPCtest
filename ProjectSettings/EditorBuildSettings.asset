@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_Scene/GroupSelfie.unity
+    guid: 28b678de09e8d344ca71ca66a1c7fd4f
+  - enabled: 1
+    path: Assets/_Scene/MainGame.unity
+    guid: 03425fd2cb7bb5343b8abc5798a5ccdc
   m_configObjects: {}

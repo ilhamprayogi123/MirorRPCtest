@@ -6,11 +6,11 @@ using UnityEngine;
 
 namespace StarterAssets
 {
+    // This script is the main script used to use the Couple Animation feature, which is to start the animation and move the position and rotation of the client that is currently related.
     public class AnimScript : NetworkBehaviour
     {
         [SerializeField]
         private PlayerNetworkBehaviour playerNet;
-
         [SerializeField]
         private ValueScript valueScript;
         [SerializeField]

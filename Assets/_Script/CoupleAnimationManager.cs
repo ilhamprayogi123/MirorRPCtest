@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace StarterAssets
 {
+    // This script is used to list which scriptable objects will appear and be used in the game scene.
     public class CoupleAnimationManager : MonoBehaviour
     {
         [SerializeField]

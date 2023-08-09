@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace StarterAssets
 {
+    // This script is used to get a function to call the animation according to the button used.
     public class GetButtonFunc : MonoBehaviour
     {
         private GameObject thisButton;

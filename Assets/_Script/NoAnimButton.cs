@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace StarterAssets
 {
+    // This script is useful for getting data from the noAnswer function so that it can be used by the No Button in the Couple Animation Request part.
     public class NoAnimButton : MonoBehaviour
     {
         private GameObject thisButton;
