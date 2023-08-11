@@ -26,8 +26,6 @@ namespace StarterAssets
         private CharcControl charControl;
         [SerializeField]
         private PosRotScript posRot;
-        //[SerializeField]
-        //private AnimScript animScript;
         
         public List<GameObject> ReqButton;
         public List<CoupleAnimationData> animDatas;

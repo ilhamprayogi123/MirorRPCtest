@@ -103,7 +103,14 @@ namespace StarterAssets
         {
             NetworkIdentity localeNetID = NetworkServer.spawned[localNetID];
             localeNetID.gameObject.GetComponent<ValueScript>().GroupID = groupID;
-            //localeNetID.gameObject.GetComponent<PlayerNetworkBehaviour>().maxIndex = maxIndex;
+            
+            for (int i = 0; i < maxIndex; i++)
+            {
+                localeNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[i].gameObject.SetActive(true);
+            }
+            
+            //localeNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[valueScript.localNets].gameObject.SetActive(true);
+
             localeNetID.gameObject.GetComponent<GroupSelfieManager>().maxIndex = maxIndex;
             localeNetID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 0;
             localeNetID.gameObject.GetComponent<ThirdPersonController>().SprintSpeed = 0;
@@ -115,10 +122,16 @@ namespace StarterAssets
         [TargetRpc]
         void RpcSelfieLocal(NetworkConnectionToClient netConID, NetworkIdentity localNetID, int groupID, int maxIndex)
         {
-            //localNetID.gameObject.GetComponent<GameObjectScript>().SelfieCanvas.gameObject.SetActive(true);
             localNetID.gameObject.GetComponent<GroupSelfieGameObj>().SelfieCanvas.gameObject.SetActive(true);
             localNetID.gameObject.GetComponent<ValueScript>().GroupID = groupID;
-            //localNetID.gameObject.GetComponent<PlayerNetworkBehaviour>().maxIndex = maxIndex;
+            
+            for (int i = 0; i < maxIndex; i++)
+            {
+                localNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[i].gameObject.SetActive(true);
+            }
+            
+            //localNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[valueScript.localNets].gameObject.SetActive(true);
+
             localNetID.gameObject.GetComponent<GroupSelfieManager>().maxIndex = maxIndex;
             localNetID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 0;
             localNetID.gameObject.GetComponent<ThirdPersonController>().SprintSpeed = 0;
@@ -139,7 +152,13 @@ namespace StarterAssets
         {
             localeID.gameObject.GetComponent<GroupSelfieGameObj>().SelfieCanvas.gameObject.SetActive(true);
             localeID.gameObject.GetComponent<GroupSelfieManager>().maxIndex = maxIndex;
-
+            //localeID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[valueScript.localNets].gameObject.SetActive(true);
+            
+            for (int i = 0; i < maxIndex; i++)
+            {
+                localeID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[i].gameObject.SetActive(true);
+            }
+            
             if (!isLocalPlayer)
             {
                 groupSelfieObj.joinButtonCanvas.gameObject.SetActive(true);
@@ -222,7 +241,6 @@ namespace StarterAssets
 
             valueScript.testClientID = thisObj.netId;
             valueScript.testID = localPlayer.gameObject.GetComponent<NetworkIdentity>().netId;
-
             CmdExitReqPanel(valueScript.testID, valueScript.testClientID);
         }
 
@@ -273,14 +291,49 @@ namespace StarterAssets
             NetworkIdentity localeNetID = NetworkServer.spawned[localNetID];
             int reset = 0;
 
+            int selfCircle = localeNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
+            Debug.Log(selfCircle);
+            //localeNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[selfCircle].gameObject.SetActive(false);
+            for (int i = 0; i <= localeNetID.gameObject.GetComponent<ValueScript>().maxIndex; i++)
+            {
+                localeNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[i].gameObject.SetActive(false);
+            }
+
+            //RpcLocaleSelfAll(localeNetID.connectionToClient, localeNetID, selfCircle);
             localeNetID.gameObject.GetComponent<ValueScript>().ResetValue();
+            //localeNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].gameObject.SetActive(true);
+            
             localeNetID.gameObject.GetComponent<GroupSelfieManager>().loc = reset;
             localeNetID.gameObject.GetComponent<GroupSelfieManager>().SavedPosition.Clear();
 
             GetAllGroupID(localeNetID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed, localeNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex, localeNetID.gameObject.GetComponent<ThirdPersonController>().SprintSpeed);
             //ResetLoc(reset);
             RpcCLose(localeNetID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed, localeNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex, localeNetID.gameObject.GetComponent<ThirdPersonController>().SprintSpeed);
-            RpcSelfieLocalClose(localeNetID.connectionToClient, localeNetID);
+            RpcSelfieLocalClose(localeNetID.connectionToClient, localeNetID, selfCircle);
+        }
+
+        // Call rpc function to close circle indicator in local client
+        [TargetRpc]
+        void RpcLocaleSelfAll(NetworkConnectionToClient netCon, NetworkIdentity netID, int selfInt)
+        {
+            //int selfCircle = localNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
+            //Debug.Log(selfCircle);
+            netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[selfInt].gameObject.SetActive(false);
+            RpcCircleCloseAll(netID, selfInt);
+        }
+
+        // Comman function to close circle indicator in server side
+        [Command]
+        void RpcCircleCloseAll(NetworkIdentity netID, int selfInt)
+        {
+            RpcCloseLocaleSelfCircleAll(netID, selfInt);
+        }
+
+        // Rpc function to close circle indicator for local client in all other client view
+        [ClientRpc]
+        void RpcCloseLocaleSelfCircleAll(NetworkIdentity netID, int selfInt)
+        {
+            netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[selfInt].gameObject.SetActive(false);
         }
 
         // Call Reset value function for all client
@@ -292,36 +345,45 @@ namespace StarterAssets
 
         // Close selfie group and enable client move
         [TargetRpc]
-        void RpcSelfieLocalClose(NetworkConnectionToClient netConID, NetworkIdentity localNetID)
+        void RpcSelfieLocalClose(NetworkConnectionToClient netConID, NetworkIdentity localNetID, int selfID)
         {
             localNetID.gameObject.GetComponent<ValueScript>().ResetValue();
-            //localNetID.gameObject.GetComponent<GameObjectScript>().buttonSelfieCanvas.gameObject.SetActive(true);
             localNetID.gameObject.GetComponent<GroupSelfieGameObj>().buttonSelfieCanvas.gameObject.SetActive(true);
-            //localNetID.gameObject.GetComponent<GameObjectScript>().unityGameObjects.Clear();
+
+            //localNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[selfID].gameObject.SetActive(false);
+
+            for (int i = 0; i <= localNetID.gameObject.GetComponent<ValueScript>().maxIndex; i++)
+            {
+                localNetID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[i].gameObject.SetActive(false);
+            }
+
             localNetID.gameObject.GetComponent<GroupSelfieManager>().SavedPosition.Clear();
-            //localNetID.gameObject.GetComponent<GameObjectScript>().joinButtonCanvas.gameObject.SetActive(true);
             localNetID.gameObject.GetComponent<GroupSelfieGameObj>().joinButtonCanvas.gameObject.SetActive(true);
-            CmdClosePanelOther(localNetID);
+            CmdClosePanelOther(localNetID, selfID);
         }
 
         // Call RPC function to closse Selfie Panel from Server
         [Command]
-        void CmdClosePanelOther(NetworkIdentity localId)
+        void CmdClosePanelOther(NetworkIdentity localId, int selfID)
         {
-            RpcPanelSelfieClose(localId);
+            RpcPanelSelfieClose(localId, selfID);
         }
 
         // Close selfie canvas for local client
         [ClientRpc]
-        void RpcPanelSelfieClose(NetworkIdentity localeID)
+        void RpcPanelSelfieClose(NetworkIdentity localeID, int selfID)
         {
-            //localeID.gameObject.GetComponent<GameObjectScript>().SelfieCanvas.gameObject.SetActive(false);
             localeID.gameObject.GetComponent<GroupSelfieGameObj>().SelfieCanvas.gameObject.SetActive(false);
-            //localeID.gameObject.GetComponent<GameObjectScript>().ExitButton.gameObject.SetActive(false);
             localeID.gameObject.GetComponent<GroupSelfieGameObj>().ExitButton.gameObject.SetActive(false);
-            //localeID.gameObject.GetComponent<ValueScript>().countText.SetText(localeID.gameObject.GetComponent<PlayerNetworkBehaviour>().indexNum.ToString());
+
+            //localeID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[selfID].gameObject.SetActive(false);
+
+            for (int i = 0; i <= localeID.gameObject.GetComponent<ValueScript>().maxIndex; i++)
+            {
+                localeID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[i].gameObject.SetActive(false);
+            }
+
             localeID.gameObject.GetComponent<ValueScript>().countText.SetText(localeID.gameObject.GetComponent<GroupSelfieManager>().indexNum.ToString());
-            //localeID.gameObject.GetComponent<ValueScript>().currentText.SetText(localeID.gameObject.GetComponent<PlayerNetworkBehaviour>().indexNum.ToString());
             localeID.gameObject.GetComponent<ValueScript>().currentText.SetText(localeID.gameObject.GetComponent<GroupSelfieManager>().indexNum.ToString());
             //localeID.gameObject.GetComponent<GameObjectScript>().unityGameObjects.Clear();
             localeID.gameObject.GetComponent<GroupSelfieManager>().SavedPosition.Clear();
