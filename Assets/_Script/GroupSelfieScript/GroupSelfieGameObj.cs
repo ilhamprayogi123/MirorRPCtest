@@ -18,6 +18,8 @@ namespace StarterAssets
         public GameObject joinButtonCanvas;
         public GameObject buttonSelfieCanvas;
         public GameObject closeSelfieCanvas;
+        public GameObject raiseStandButton;
+        public GameObject lowerStandButton;
 
         public TMP_Text currentText;
         public TMP_Text maxText;

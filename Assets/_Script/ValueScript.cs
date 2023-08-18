@@ -64,6 +64,8 @@ namespace StarterAssets
         public uint objId;
         [SyncVar]
         public uint testID;
+        [SyncVar]
+        public uint forHeightLocalID;
 
         [SyncVar]
         public int localNets;
@@ -117,7 +119,7 @@ namespace StarterAssets
 
             gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 2;
             gameObject.GetComponent<ThirdPersonController>().SprintSpeed = 5.335f;
-
+            gameObject.GetComponent<ThirdPersonController>().enabled = true;
             gameObject.GetComponent<GroupSelfieManager>().indexNum = 0;
             gameObject.GetComponent<GroupSelfieManager>().countNum = 0;
             gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = 0;

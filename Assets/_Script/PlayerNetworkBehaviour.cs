@@ -11,6 +11,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using UnityEngine.Networking.Types;
 using System;
+using Unity.VisualScripting;
 
 namespace StarterAssets
 {
@@ -88,7 +89,7 @@ namespace StarterAssets
                 uint localNets = localNetGameobject.gameObject.GetComponent<NetworkIdentity>().netId;
                 valueScript.GroupID = Convert.ToInt32(localNets);
 
-                this.gameObject.GetComponent<MeshCollider>().enabled = false;
+                //this.gameObject.GetComponent<MeshCollider>().enabled = false;
                 playName = inputName;
 
                 assignButton.onClick.AddListener(assignAct);
@@ -183,6 +184,12 @@ namespace StarterAssets
             
             idNetwork = valueScript.idNet;
             playName = inputData.InputText;
+
+            if (!isLocalPlayer)
+            {
+                ThirdPersonController TPControl = GetComponent<ThirdPersonController>();
+                TPControl.enabled = false;
+            }
         }
     }
 }

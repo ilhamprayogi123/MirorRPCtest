@@ -47,7 +47,13 @@ namespace StarterAssets
         [SyncVar(hook = nameof(RpcChangeIndex))]
         public int varIndexInt;
 
+        public bool isCenterPos = false;
+        public bool isCenterAvailable = false;
+        public bool firstIn = true;
+        public bool isRaising = false;
+
         public List<GameObject> SavedPosition = new List<GameObject>();
+        public List<GameObject> CenterObject = new List<GameObject>();
 
         public GameObject[] selfiePos;
 

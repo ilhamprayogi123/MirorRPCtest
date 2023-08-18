@@ -18,6 +18,10 @@ namespace StarterAssets
         public Quaternion locRot;
         [SyncVar]
         public Quaternion targetRot;
+        [SyncVar]
+        public Vector3 varHeight;
+        [SyncVar]
+        public Vector3 newVarHeight;
     }
 }
 
