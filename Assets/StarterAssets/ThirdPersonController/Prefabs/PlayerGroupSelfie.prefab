@@ -12954,8 +12954,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 3688133113844990282}
-        m_TargetAssemblyTypeName: StarterAssets.GroupSelfieCanvas, Assembly-CSharp
+      - m_Target: {fileID: 2926401931806257765}
+        m_TargetAssemblyTypeName: StarterAssets.RaiseLower, Assembly-CSharp
         m_MethodName: BackHeight
         m_Mode: 1
         m_Arguments:
@@ -14734,6 +14734,7 @@ GameObject:
   - component: {fileID: 3688133113844990282}
   - component: {fileID: 6813109477755608028}
   - component: {fileID: 3720419826940974779}
+  - component: {fileID: 2926401931806257765}
   m_Layer: 6
   m_Name: PlayerGroupSelfie
   m_TagString: Player
@@ -15398,6 +15399,26 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
+--- !u!114 &2926401931806257765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3653722716656008879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca5bd6c361cbad84a84725982ad0259c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  isRaise: 0
+  valueScript: {fileID: 6322208977475179320}
+  groupSelfieManager: {fileID: 6813109477755608028}
+  originVector: {x: 0, y: 0, z: 0}
+  newOriginVectopr: {x: 0, y: 0, z: 0}
 --- !u!1 &3699369821704278185
 GameObject:
   m_ObjectHideFlags: 0
@@ -22373,8 +22394,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3688133113844990282}
-        m_TargetAssemblyTypeName: StarterAssets.GroupSelfieCanvas, Assembly-CSharp
+      - m_Target: {fileID: 2926401931806257765}
+        m_TargetAssemblyTypeName: StarterAssets.RaiseLower, Assembly-CSharp
         m_MethodName: Lowerbutton
         m_Mode: 1
         m_Arguments:
@@ -23933,7 +23954,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b31d1ed601f71bd4db4367f9fb8dbccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCenter: 0
+  isCenter: 1
 --- !u!1 &6036070281581466884
 GameObject:
   m_ObjectHideFlags: 0
@@ -34957,8 +34978,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3688133113844990282}
-        m_TargetAssemblyTypeName: StarterAssets.GroupSelfieCanvas, Assembly-CSharp
+      - m_Target: {fileID: 2926401931806257765}
+        m_TargetAssemblyTypeName: StarterAssets.RaiseLower, Assembly-CSharp
         m_MethodName: RaiseButton
         m_Mode: 1
         m_Arguments:

@@ -30,29 +30,17 @@ namespace StarterAssets
 
         public Vector3 originVector;
         public Vector3 newOriginVectopr;
-        //public bool firstIn;
-
-        Rigidbody rigid;
+        
+        //Rigidbody rigid;
 
         private void Start()
         {
             isRaise = false;
-            //firstIn = true;
-            rigid = this.gameObject.GetComponent<Collider>().attachedRigidbody;
+            //rigid = this.gameObject.GetComponent<Collider>().attachedRigidbody;
         }
 
         private void Update()
         {
-            if (gameObject.transform.position.y >= 0.3)
-            {
-                gameObject.transform.position = new Vector3(transform.position.x, 0.3f, transform.position.z);
-            }
-
-            if (gameObject.transform.position.y <= 0)
-            {
-                gameObject.transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
-            }
-
             if (isRaise == true)
             {
                 this.gameObject.GetComponent<Transform>().gameObject.transform.position = posRotScript.newVarHeight;
@@ -128,7 +116,6 @@ namespace StarterAssets
             localID.gameObject.GetComponent<Transform>().rotation = posID.gameObject.GetComponent<Transform>().rotation;
 
             localID.gameObject.GetComponent<ValueScript>().GroupID = posID.gameObject.GetComponent<ValueScript>().GroupID;
-            //posID.gameObject.GetComponent<GameObjectScript>().unityGameObjects.Add(localID.gameObject);
             posID.gameObject.GetComponent<GroupSelfieManager>().SavedPosition.Add(localID.gameObject);
 
             localID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 0;
@@ -166,9 +153,7 @@ namespace StarterAssets
             }
             else if (localPosID.gameObject.GetComponent<ValueScript>().isContinue == true && localPosID.gameObject.GetComponent<ValueScript>().anySpace == true)
             {
-                //netID.gameObject.GetComponent<PlayerNetworkBehaviour>().selfiePosIndex = localPosID.gameObject.GetComponent<ValueScript>().indexContinue;
                 netID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = localPosID.gameObject.GetComponent<ValueScript>().indexContinue;
-                //localPosID.gameObject.GetComponent<PlayerNetworkBehaviour>().selfiePosIndex = localPosID.gameObject.GetComponent<ValueScript>().indexContinue;
                 localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = localPosID.gameObject.GetComponent<ValueScript>().indexContinue;
 
                 if (localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isCenter == true)
@@ -216,77 +201,11 @@ namespace StarterAssets
             netID.gameObject.GetComponent<ThirdPersonController>().enabled = false;
             CmdChangeIndex(netID, localPosID);
         }
-
-        // Function to raise height position 
-        public void RaisePosFunc()
-        {
-            foreach (GameObject CenterObj in groupSelfieManager.CenterObject)
-            {
-                if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos == true)
-                {
-                    CenterObj.gameObject.GetComponent<PosRotScript>().varHeight = CenterObj.gameObject.GetComponent<Transform>().position;
-
-                    CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight = new Vector3(CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.x, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.y + 0.3f, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.z);
-                    CenterObj.gameObject.GetComponent<Transform>().gameObject.transform.position = CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight;
-                    CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = true;
-
-                    CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = false;
-                }
-            }
-        }
-
-        // Function to lower height position 
-        public void LowerPosFunc()
-        {
-            foreach (GameObject CenterObj in groupSelfieManager.CenterObject)
-            {
-                if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos == true)
-                {
-                    CenterObj.gameObject.GetComponent<PosRotScript>().varHeight = CenterObj.gameObject.GetComponent<Transform>().position;
-
-                    CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight = new Vector3(CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.x, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.y - 0.3f, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.z);
-                    
-                    CenterObj.gameObject.GetComponent<Transform>().gameObject.transform.position = CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight;
-                    CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
-
-                    Debug.Log("TestKas");
-
-                    CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = false;
-                    //CenterObj.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-                }
-            }
-        }
-
-        // Function to reset position for the member of the selfie group.
-        public void BackRaisePosFunc()
-        {
-            foreach (GameObject CenterObj in groupSelfieManager.CenterObject)
-            {
-                if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos == true)
-                {
-                    if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising == true)
-                    {
-                        CenterObj.gameObject.GetComponent<Transform>().gameObject.transform.position = CenterObj.gameObject.GetComponent<PosRotScript>().varHeight;
-                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = false;
-                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
-                        CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = true;
-                        Debug.Log("TestDebug");
-                    }
-                    else if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising == false)
-                    {
-                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = false;
-                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
-                        CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = true;
-                    }
-                }
-            }
-        }
-
+        
         // Command function to call rpc function for add the desired client object to special list.
         [Command(requiresAuthority = false)]
         void CmdGetCenterObjData(NetworkIdentity targetID, NetworkIdentity addedID)
         {
-            //targetID.gameObject.GetComponent<GroupSelfieManager>().CenterObject.Add(addedID.gameObject);
             RpcGetCenterobjData(targetID, addedID);
         }
 
@@ -322,8 +241,6 @@ namespace StarterAssets
         void CmdChangeIndex(NetworkIdentity netID, NetworkIdentity localID)
         {
             int currentInt = localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
-            //localID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[currentInt].gameObject.SetActive(false);
-
             localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex++;
             localID.gameObject.GetComponent<GroupSelfieManager>().countNum++;
             int selfID = localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
@@ -336,7 +253,6 @@ namespace StarterAssets
         [TargetRpc]
         void RpcTargetChangeIndex(NetworkConnectionToClient netCon, NetworkIdentity netID, int currentInt, int selfID)
         {
-            //netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[currentInt].gameObject.SetActive(false);
             netID.gameObject.GetComponent<ValueScript>().changeIndex = true;
             CmdIndexTex(netID, currentInt, selfID);
         }
@@ -352,7 +268,6 @@ namespace StarterAssets
         [Command(requiresAuthority = false)]
         void CmdIndexTex(NetworkIdentity netID, int currentInt, int selfID)
         {
-            //netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].gameObject.SetActive(true);
             RpcTextIndex(netID, currentInt, selfID);
         }
 
@@ -366,38 +281,6 @@ namespace StarterAssets
             netID.gameObject.GetComponent<GroupSelfieGameObj>().currentText.SetText(netID.gameObject.GetComponent<GroupSelfieManager>().countNum.ToString());
             //CmdChangeCircle(netID);
 
-        }
-
-        // Command function to Close circle indicator after client transform to this circle indicator position 
-        [Command(requiresAuthority = false)]
-        void CmdCloseAllCircle(NetworkIdentity netID, int selfID)
-        {
-            netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].gameObject.SetActive(false);
-            RpcAllCloseCircle(netID, selfID);
-        }
-
-        // Rpc Function to close the Circle Indicator that already accupied in other client view
-        [ClientRpc]
-        void RpcAllCloseCircle(NetworkIdentity netID, int selfID)
-        {
-            netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].gameObject.SetActive(false);
-            //netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[selfID].gameObject.SetActive(true);
-        }
-
-        // Command function to open new circle indicator after new client join the group and the circle indicator position will updated
-        [Command(requiresAuthority = false)]
-        void CmdChangeCircle(NetworkIdentity netID)
-        {
-            Debug.Log(netID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex);
-            int selfID = netID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
-            ///netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[selfID].gameObject.SetActive(true);
-        }
-
-        // Rpc function to open new circle indicator after new client join the group and the circle indicator position will updated
-        [ClientRpc]
-        void RpcChangeCircle(NetworkIdentity netID, int selfID)
-        {
-            netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[selfID].gameObject.SetActive(true);
         }
 
         // Call function after client want to exit the Group Selfie
@@ -479,7 +362,6 @@ namespace StarterAssets
         [Command]
         void CmdAllSaved(NetworkIdentity netID, int indexSaved, int continueIndex, int currentIndex)
         {
-            Debug.Log("Test Save All Local");
             RpcSavedIndex(netID, indexSaved, continueIndex, currentIndex);
         }
 
@@ -494,10 +376,8 @@ namespace StarterAssets
                 netID.gameObject.GetComponent<ValueScript>().anySpace = true;
                 netID.gameObject.GetComponent<ValueScript>().indexSaved = indexSaved;
                 netID.gameObject.GetComponent<ValueScript>().currentIndex = currentIndex;
-                //netID.gameObject.GetComponent<PlayerNetworkBehaviour>().currentIndex = currentIndex;
                 netID.gameObject.GetComponent<GroupSelfieManager>().currentIndex = currentIndex;
                 netID.gameObject.GetComponent<ValueScript>().indexContinue = continueIndex;
-
                 netID.gameObject.GetComponent<ValueScript>().isNext = true;
             }
             else if (netID.gameObject.GetComponent<ValueScript>().isNext == true)
@@ -505,6 +385,7 @@ namespace StarterAssets
                 netID.gameObject.GetComponent<ValueScript>().anySpace = true;
                 netID.gameObject.GetComponent<ValueScript>().indexSaved = indexSaved;
             }
+
             netID.gameObject.GetComponent<ValueScript>().numIndex.Add(indexSaved);
         }
 
@@ -520,7 +401,6 @@ namespace StarterAssets
                 localID.gameObject.GetComponent<GoupSelfieScript>().originVector = localID.gameObject.GetComponent<Transform>().position;
                 localID.gameObject.GetComponent<GoupSelfieScript>().newOriginVectopr = new Vector3(localID.gameObject.GetComponent<GoupSelfieScript>().originVector.x, localID.gameObject.GetComponent<GoupSelfieScript>().originVector.y - 0.6f, localID.gameObject.GetComponent<GoupSelfieScript>().originVector.z);
                 localID.gameObject.GetComponent<Transform>().gameObject.transform.position = localID.gameObject.GetComponent<GoupSelfieScript>().newOriginVectopr;
-
                 localID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
                 localID.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
             }
@@ -529,7 +409,6 @@ namespace StarterAssets
             localID.gameObject.GetComponent<ThirdPersonController>().SprintSpeed = 5.335f;
             localID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
             localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = false;
-            //localID.gameObject.GetComponent<GroupSelfieCanvas>().BackHeight();
             localID.gameObject.GetComponent<ValueScript>().GroupID = grouIDs;
 
             if (posID.gameObject.GetComponent<ValueScript>().readyChange == true)
@@ -539,19 +418,16 @@ namespace StarterAssets
                     posID.gameObject.GetComponent<ValueScript>().anySpace = true;
                     posID.gameObject.GetComponent<ValueScript>().indexSaved = localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
                     int currentCircle = posID.gameObject.GetComponent<ValueScript>().indexSaved;
-                    //posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[currentCircle].gameObject.SetActive(true);
-
+                    
                     posID.gameObject.GetComponent<ValueScript>().currentIndex = posID.gameObject.GetComponent<GroupSelfieManager>().countNum;
                     posID.gameObject.GetComponent<ValueScript>().indexContinue = posID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
                     int nextCircle = posID.gameObject.GetComponent<ValueScript>().indexContinue;
-                    //posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[nextCircle].gameObject.SetActive(false);
 
                     posID.gameObject.GetComponent<ValueScript>().isNext = true;
                 }
                 else if (posID.gameObject.GetComponent<ValueScript>().isNext == true)
                 {
                     posID.gameObject.GetComponent<ValueScript>().anySpace = true;
-
                     posID.gameObject.GetComponent<ValueScript>().indexSaved = localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
                 }
             }
@@ -569,19 +445,14 @@ namespace StarterAssets
             if (isLocalPlayer)
             {
                 localPosID.gameObject.GetComponent<GroupSelfieGameObj>().joinButtonCanvas.gameObject.SetActive(true);
-                Debug.Log("TestJoinButton");
                 localPosID.gameObject.GetComponent<GroupSelfieGameObj>().ExitButton.gameObject.SetActive(false);
             }
 
             if (netID.gameObject.GetComponent<GroupSelfieManager>().isRaising == true)
             {
-
                 netID.gameObject.GetComponent<GoupSelfieScript>().originVector = netID.gameObject.GetComponent<Transform>().position;
-
                 netID.gameObject.GetComponent<GoupSelfieScript>().newOriginVectopr = new Vector3(netID.gameObject.GetComponent<GoupSelfieScript>().originVector.x, netID.gameObject.GetComponent<GoupSelfieScript>().originVector.y - 0.6f, netID.gameObject.GetComponent<GoupSelfieScript>().originVector.z);
-
                 netID.gameObject.GetComponent<Transform>().gameObject.transform.position = netID.gameObject.GetComponent<GoupSelfieScript>().newOriginVectopr;
-
                 netID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
                 netID.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
             }
@@ -609,7 +480,6 @@ namespace StarterAssets
                     localPosID.gameObject.GetComponent<ValueScript>().indexSaved = netID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
                 }
             }
-
             netID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = 0;
             CmdChangeIndexMinus(netID, localPosID);
         }
@@ -623,40 +493,14 @@ namespace StarterAssets
                 localID.gameObject.GetComponent<ValueScript>().anySpace = true;
             }
 
-            //localID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].gameObject.SetActive(false);
             int localSelf = localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
-            //RpcChangeLocalCircle(localID.connectionToClient, localID, localSelf);
 
             localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex--;
             localID.gameObject.GetComponent<GroupSelfieManager>().countNum--;
             localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = false;
-
             int selfID = localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
-            //localID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[selfID].gameObject.SetActive(true);
 
             RpcTargetChangeIndexMinus(localID.connectionToClient, localID, selfID, netID);
-        }
-
-        // Rpc function to close circle indicator after exit the group
-        [TargetRpc]
-        void RpcChangeLocalCircle(NetworkConnectionToClient netCon, NetworkIdentity netID, int localSelf)
-        {
-            netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[localSelf].gameObject.SetActive(false);
-            CmdChangeCircleAll(netID, localSelf);
-        }
-
-        // Command function to close circle indicator after exit the group
-        [Command(requiresAuthority = false)]
-        void CmdChangeCircleAll(NetworkIdentity netID, int localSelf)
-        {
-            RpcChangeCircleAll(netID, localSelf);
-        }
-
-        // Rpc function to close circle indicator after the client exit the group at others players view
-        [ClientRpc]
-        void RpcChangeCircleAll(NetworkIdentity netID, int localSelf)
-        {
-            netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[localSelf].gameObject.SetActive(false);
         }
 
         // Rpc function to change index in one of the client who open the group selfie
@@ -668,7 +512,6 @@ namespace StarterAssets
                 netID.gameObject.GetComponent<ValueScript>().anySpace = true;
             }
 
-            //netID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].gameObject.SetActive(false);
             netID.gameObject.GetComponent<ValueScript>().changeIndex = true;
             CmdIndexTexMin(netID, selfID, locNetID);
         }
@@ -696,7 +539,6 @@ namespace StarterAssets
                 locNetID.gameObject.GetComponent<GoupSelfieScript>().originVector = locNetID.gameObject.GetComponent<Transform>().position;
                 locNetID.gameObject.GetComponent<GoupSelfieScript>().newOriginVectopr = new Vector3(locNetID.gameObject.GetComponent<GoupSelfieScript>().originVector.x, locNetID.gameObject.GetComponent<GoupSelfieScript>().originVector.y - 0.6f, locNetID.gameObject.GetComponent<GoupSelfieScript>().originVector.z);
                 locNetID.gameObject.GetComponent<Transform>().gameObject.transform.position = locNetID.gameObject.GetComponent<GoupSelfieScript>().newOriginVectopr;
-
                 locNetID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
                 locNetID.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
             }
