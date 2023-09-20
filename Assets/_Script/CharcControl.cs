@@ -1,4 +1,5 @@
 using Mirror;
+using razz;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace StarterAssets
             this.gameObject.GetComponent<CharacterController>().enabled = false;
             this.gameObject.GetComponent<PlayerInput>().enabled = false;
             this.gameObject.GetComponent<ThirdPersonController>().enabled = false;
+            //this.gameObject.GetComponent<PlayerController>().enabled = false;
         }
 
         // Enable player control
@@ -24,6 +26,17 @@ namespace StarterAssets
             this.gameObject.GetComponent<CharacterController>().enabled = true;
             this.gameObject.GetComponent<PlayerInput>().enabled = true;
             this.gameObject.GetComponent<ThirdPersonController>().enabled = true;
+            //this.gameObject.GetComponent<PlayerController>().enabled = true;
+        }
+
+        public void controlAnimStop()
+        {
+            this.gameObject.GetComponent<PlayerController>().enabled = false;
+        }
+
+        public void controlAnimStart()
+        {
+            this.gameObject.GetComponent<PlayerController>().enabled = true;
         }
     }
 }

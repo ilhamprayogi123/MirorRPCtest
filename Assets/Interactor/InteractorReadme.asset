@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0349c7867b2fcd2449b7a49bd6aa2f43, type: 3}
+  m_Name: InteractorReadme
+  m_EditorClassIdentifier: 
+  icon: {fileID: 2800000, guid: 67901cddf5c17f04b89a2f160c0b6d06, type: 3}
+  iconMaxWidth: 192
+  title: "    Interactor \n      v0.96 "
+  sections:
+  - heading: Thank You!
+    text: So you're here! It means you have spent your money on my software (I suppose),
+      imported it into your project and you're ready to use. I'm glad that you did
+      and I hope you find this tool quite useful. You'll find starter infos you need
+      below. If you need more, kindly go to Online Documentation.
+    linkText: 
+    url: 
+  - heading: Setup for Interactor
+    text: "No need to worry about the setup because Interactor needs almost nothing
+      to change in your project. \n\n1 - Add \"Player\" layer to your Layers (Top
+      right corner of the Unity). This is for preventing conflicts while spawning
+      new prefabs and selecting distant objects with raycasts. \n\nThat's all!"
+    linkText: 
+    url: 
+  - heading: Online Documentation and Videos
+    text: Details of Interactor are explained in Online Documentation with images,
+      gifs, diagrams, code descriptions, tutorial videos and more.
+    linkText: Online Documentation & Videos
+    url: https://negengames.com/interactor
+  - heading: Integrations and Examples
+    text: "Currently, there are two versions of Interactor. When you import, it comes
+      with DefaultPack (Unity IK) and you can convert between DefaultPack and FikPack
+      (Final IK integration) on the Interactor component at any time. If you want
+      to switch, add Interactor to any scene object and select at Integrations section
+      on the added component. \n\nInteractor comes with default 1K textures because
+      of file sizes. If you want to use 4K versions, you can download and import the
+      4K texture pack. Just import the pack and it's done without any tweaks. "
+    linkText: 4K Texture Pack
+    url: https://negengames.com/interactor/texturepack.html
+  - heading: QuickStart
+    text: "I strongly suggest you examine the Example Scenes first if you didn't yet.
+      There are samples for every interaction type with additional info. Also, there
+      are lots of comments on codes and tooltips on components to explain most of
+      the things. \n\nHere is a quick guide for testing your first interactions with
+      your own character: \n\n1- Add Interactor to the player character (It will also
+      add sphere collider). \n\n2- Set sphere collider as a trigger. \n\n3- Click
+      Start Interactor button and it will add your first Effector after you save your
+      data file. \n\n4- Effectors are like interaction sensors (one for each interactable
+      player part). Add many as you need ([ + ] [ - ] buttons), select Effector Type
+      and press the Auto button.\n\n5- Add InteractorIK component to your character.
+      Set your IK Parts for each interactable body part. And enable Match Child Bones.
+      \n\n6- Add BasicUI.cs and BasicInputInteract.cs to your Player (Same place with
+      Interactor). \n\n7- Put your player to ExampleScenes and try interactions. If
+      you have issues check the possible reasons in Troubleshoot section. "
+    linkText: Troubleshoot
+    url: https://negengames.com/interactor/documentation.html#troubleshoot
+  - heading: Last Words
+    text: "If you're satisfied and want to support this tool, I'd appreciate it if
+      you leave ratings & comments on the store page. Your reviews significantly increase
+      the time I can focus on Interactor instead of doing other freelance projects
+      to make a living. If you're not satisfied, reach me and I'll do my best to help.
+      Thank you. \n\nI wish you all the best in your projects!\n-Gokhan Yilmaz"
+    linkText: Interactor Store Page
+    url: https://assetstore.unity.com/packages/slug/178062

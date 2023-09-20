@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using UnityEngine.Networking.Types;
 using System;
 using System.Xml.Linq;
+using Unity.VisualScripting;
 
 namespace StarterAssets
 {
@@ -54,6 +55,8 @@ namespace StarterAssets
 
         public List<GameObject> SavedPosition = new List<GameObject>();
         public List<GameObject> CenterObject = new List<GameObject>();
+        public List<GameObject> SecondCenterObject = new List<GameObject>();
+        public List<GameObject> ThirdCenterObject = new List<GameObject>();
 
         public GameObject[] selfiePos;
 
@@ -74,8 +77,24 @@ namespace StarterAssets
             {
                 valueScript.anySpace = false;
                 valueScript.isContinue = false;
+                //valueScript.isMax = true;
+            }
+            
+            if (isLocalPlayer && valueScript.isMax == false && valueScript.isSelfieActive == true)
+            {
+                groupSelfieObj.joinButtonCanvas.gameObject.SetActive(false);
+                //valueScript.changeIndex = false;
+                //MinIndex();
             }
 
+            if (!isLocalPlayer && valueScript.isMax == false && valueScript.isSelfieActive == true)
+            {
+                groupSelfieObj.joinButtonCanvas.gameObject.SetActive(true);
+            } else if (!isLocalPlayer && valueScript.isMax == true && valueScript.isSelfieActive == true)
+            {
+                groupSelfieObj.joinButtonCanvas.gameObject.SetActive(false);
+            }
+            
             if (valueScript.changeIndex == true)
             {
                 if (countNum >= maxIndex)
@@ -84,22 +103,34 @@ namespace StarterAssets
                     valueScript.isContinue = false;
                     valueScript.isMax = true;
                     //saveIndex();
-                    Debug.Log("Is Full");
 
                     if (valueScript.isMax == true)
                     {
                         Debug.Log("Test Debug");
-                        MaxIndex();
+                        //MaxIndex();
+                        groupSelfieObj.joinButtonCanvas.gameObject.SetActive(false);
                         valueScript.changeIndex = false;
                     }
                 }
-                
+
+                if (countNum < maxIndex)
+                {
+                    valueScript.isMax = false;
+                    //Debug.Log("Is Minus");
+                    //MinIndex();
+                }
+
                 if (valueScript.anySpace == true && countNum == currentIndex)
                 {
                     valueScript.isContinue = true;
-                    valueScript.anySpace = true;
+                    valueScript.anySpace = false;
                 }
 
+                if (countNum != currentIndex)
+                {
+                    valueScript.isContinue = false;
+                    //valueScript.anySpace = true;
+                }
             }
         }
 
@@ -119,6 +150,8 @@ namespace StarterAssets
         [Command(requiresAuthority = false)]
         void CmdIndexUpdate()
         {
+            groupSelfieObj.maxText.SetText(maxIndex.ToString());
+
             indexPanel();
         }
 
@@ -136,18 +169,66 @@ namespace StarterAssets
             CmdJoinClose();
         }
 
+        public void MinIndex()
+        {
+            CmdExitClose();
+        }
+
         // Cammand function to call Rpc for close the join button
         [Command(requiresAuthority = false)]
         void CmdJoinClose()
         {
-            RpcJoinCLose();
+            valueScript.isMax = true;
+            //RpcJoinCLose();
+            RpcTargetClose(valueScript.isMax);
+        }
+
+        [TargetRpc]
+        void RpcTargetClose(bool active)
+        {
+            valueScript.isMax = active;
+            CmdTargetClose(active);
+        }
+
+        [Command]
+        void CmdTargetClose(bool active)
+        {
+            RpcJoinCLose(active);
+        }
+
+        // Cammand function to call Rpc for close the join button
+        [Command(requiresAuthority = false)]
+        void CmdExitClose()
+        {
+            //valueScript.isMax = false;
+            RpcTargetExitClose(valueScript.isMax);
+        }
+
+        [TargetRpc]
+        void RpcTargetExitClose(bool active)
+        {
+            //valueScript.isMax = active;
+            CmdTargetExitClose(active);
+        }
+
+        [Command]
+        void CmdTargetExitClose(bool active)
+        {
+            RpcExitCLose(active);
         }
 
         // Close hoin button canvas for all client
         [ClientRpc]
-        void RpcJoinCLose()
+        void RpcJoinCLose(bool active)
         {
-            //gameObjectScript.joinButtonCanvas.gameObject.SetActive(false);
+            groupSelfieObj.joinButtonCanvas.gameObject.SetActive(active);
+        }
+
+        // Close hoin button canvas for all client
+        [ClientRpc]
+        void RpcExitCLose(bool active)
+        {
+            Debug.Log("Is not max");
             groupSelfieObj.joinButtonCanvas.gameObject.SetActive(false);
         }
     }

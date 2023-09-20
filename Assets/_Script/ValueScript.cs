@@ -1,9 +1,11 @@
 using Mirror;
 using StarterAssets;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+//using static UnityEditor.Progress;
 
 namespace StarterAssets
 {
@@ -31,12 +33,17 @@ namespace StarterAssets
         [SyncVar]
         public int limit;
 
+        public int testIntID;
+
         [SyncVar]
         public int indexSaved;
         [SyncVar]
         public int indexContinue;
         [SyncVar]
         public int currentIndex;
+
+        //[SyncVar]
+        //public int countGroup;
 
         [SyncVar]
         public int varIndexInt = 0;
@@ -49,10 +56,20 @@ namespace StarterAssets
         public TMP_Text maxText;
 
         [SyncVar]
+        public bool isGroupSelfie = false;
+
+        [SyncVar]
+        public bool isSelfie = false;
+
+        [SyncVar]
         public uint localID;
+
+        [SyncVar]
+        public uint thisID;
+
         [SyncVar]
         public uint locID;
-        [SyncVar]
+        [SyncVar(hook = nameof(OnSlfieIDChangeUpdated))]
         public uint localeSelfieID;
         [SyncVar]
         public uint otherClientIDs;
@@ -72,7 +89,13 @@ namespace StarterAssets
         [SyncVar]
         public int locNets;
 
+        [SyncVar]
         public bool isMax = false;
+        [SyncVar]
+        public bool isMinus = false;
+        [SyncVar]
+        public bool isDoneSpace = false;
+
         public bool changeIndex = false;
         public bool readyChange = false;
         public bool isMin = false;
@@ -82,17 +105,45 @@ namespace StarterAssets
         public bool empty = false;
         public bool isNext;
 
+        [SyncVar]
+        public bool isSelfieActive;
+
+        //[SerializeField]
+        //public readonly SyncList<uint> listing = new SyncList<uint>();
+
         // Increase count in count client panel
         public void IncreaseCount()
         {
             this.gameObject.GetComponent<GroupSelfieManager>().indexNum++;
+            
+            if (this.gameObject.GetComponent<GroupSelfieManager>().indexNum >= 20)
+            {
+                this.gameObject.GetComponent<GroupSelfieManager>().indexNum = 20;
+            }
+            
             //countText.SetText(playerNet.indexNum.ToString());
             this.gameObject.GetComponent<ValueScript>().countText.SetText(this.gameObject.GetComponent<GroupSelfieManager>().indexNum.ToString());
             //playerNet.maxIndex = playerNet.indexNum;
             this.gameObject.GetComponent<GroupSelfieManager>().maxIndex = this.gameObject.GetComponent<GroupSelfieManager>().indexNum;
-
+            localeSelfieID = this.gameObject.GetComponent<NetworkIdentity>().netId;
             GameObject thisObject = NetworkClient.localPlayer.gameObject;
             limit = thisObject.gameObject.GetComponent<GroupSelfieManager>().maxIndex;
+            CmdSetLimit(localeSelfieID, limit);
+        }
+
+        [Command]
+        void CmdSetLimit(uint netID, int limit)
+        {
+            NetworkIdentity localeNetID = NetworkServer.spawned[netID];
+
+            localeNetID.gameObject.GetComponent<ValueScript>().limit = limit;
+        }
+
+        // Change Player name
+        private void OnSlfieIDChangeUpdated(uint oldID, uint newID)
+        {
+            //playerNameText.text = playerName;
+            localeSelfieID = newID;
         }
 
         // Decrease count in count client panel
@@ -107,7 +158,7 @@ namespace StarterAssets
 
             this.gameObject.GetComponent<ValueScript>().countText.SetText(this.gameObject.GetComponent<GroupSelfieManager>().indexNum.ToString());
             this.gameObject.GetComponent<GroupSelfieManager>().maxIndex = this.gameObject.GetComponent<GroupSelfieManager>().indexNum;
-
+            localeSelfieID = this.gameObject.GetComponent<NetworkIdentity>().netId;
             GameObject thisObject = NetworkClient.localPlayer.gameObject;
             limit = thisObject.gameObject.GetComponent<GroupSelfieManager>().maxIndex;
         }
@@ -120,6 +171,7 @@ namespace StarterAssets
             gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 2;
             gameObject.GetComponent<ThirdPersonController>().SprintSpeed = 5.335f;
             gameObject.GetComponent<ThirdPersonController>().enabled = true;
+            gameObject.GetComponent<ValueScript>().isSelfieActive = false;
             gameObject.GetComponent<GroupSelfieManager>().indexNum = 0;
             gameObject.GetComponent<GroupSelfieManager>().countNum = 0;
             gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = 0;

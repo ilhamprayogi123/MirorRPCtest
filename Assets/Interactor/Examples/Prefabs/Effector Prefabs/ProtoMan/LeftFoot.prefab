@@ -1,0 +1,222 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1078558958782969393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1078558958782969392}
+  - component: {fileID: 1078558958782969407}
+  m_Layer: 10
+  m_Name: LeftFoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1078558958782969392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078558958782969393}
+  m_LocalRotation: {x: 0, y: -0.49816224, z: -0.86708385, w: 0}
+  m_LocalPosition: {x: 0, y: 0.0559, z: -0.1356}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1078558960108780226}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 239.757, y: 180, z: 0}
+--- !u!114 &1078558958782969407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078558958782969393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b189b60af651c4fbddf6343e33e3ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _intObj: {fileID: 0}
+  effectorType: 7
+  matchChildrenBones: 1
+  excludeFromBones: []
+  overrideEffector: 0
+  oHorizontalAngle: 0
+  oHorizontalOffset: 0
+  oVerticalAngle: 0
+  oVerticalOffset: 0
+  oMaxRange: 0.5
+  oMinRange: 0
+  targetBones: []
+  speedDebug: 0
+  targetSegmentPoints:
+  - {x: 0.00000000745055, y: 0.17070323, z: -0.38352728}
+  - {x: 0.0000000070584156, y: 0.16466096, z: -0.37047848}
+  - {x: 0.0000000066662817, y: 0.15861867, z: -0.35742968}
+  - {x: 0.0000000062741474, y: 0.1525764, z: -0.34438086}
+  - {x: 0.000000005882013, y: 0.14653412, z: -0.33133206}
+  - {x: 0.0000000054898788, y: 0.14049184, z: -0.31828326}
+  - {x: 0.000000005097745, y: 0.13444957, z: -0.30523446}
+  - {x: 0.0000000047056106, y: 0.1284073, z: -0.29218566}
+  - {x: 0.0000000043134762, y: 0.12236503, z: -0.27913684}
+  - {x: 0.000000003921342, y: 0.11632275, z: -0.26608804}
+  - {x: 0.0000000035292078, y: 0.11028047, z: -0.25303924}
+  - {x: 0.0000000031370737, y: 0.1042382, z: -0.23999044}
+  - {x: 0.0000000027449396, y: 0.098195925, z: -0.22694165}
+  - {x: 0.000000002352805, y: 0.09215365, z: -0.21389282}
+  - {x: 0.0000000019606712, y: 0.086111374, z: -0.20084402}
+  - {x: 0.0000000015685366, y: 0.080069095, z: -0.1877952}
+  - {x: 0.0000000011764025, y: 0.07402682, z: -0.17474641}
+  - {x: 7.8426854e-10, y: 0.06798455, z: -0.16169761}
+  - {x: 3.9213405e-10, y: 0.061942272, z: -0.1486488}
+  - {x: 0, y: 0.0559, z: -0.1356}
+  asset: 0
+  pathSegments:
+  - startPosition: {x: 0.00000000745055, y: 0.114803225, z: -0.24792728}
+    endPosition: {x: 0, y: 0, z: 0}
+    startTangent: {x: 0, y: 0, z: 0}
+    endTangent: {x: 0, y: 0, z: 0}
+    endRotation: {x: 0, y: 0, z: 0, w: 0}
+    bezier: 0
+    segmentChanged: 0
+    length: 0.27321738
+    callEndEvent: -1
+    followTransform: -1
+  - startPosition: {x: 0, y: 0, z: 0}
+    endPosition: {x: 0.00000000745055, y: 0.114803225, z: -0.24792728}
+    startTangent: {x: 0, y: 0, z: 0}
+    endTangent: {x: 0, y: 0, z: 0}
+    endRotation: {x: 0, y: 0, z: 0, w: 0}
+    bezier: 0
+    segmentChanged: 0
+    length: 0.27321738
+    callEndEvent: -1
+    followTransform: -1
+  backCount: 1
+  bezierMode: 0
+  endEvents: []
+  followTransforms: []
+  targetTotalLength: 0.27321738
+  backTotalLength: 0.27321738
+  resetAfterInteraction: 0
+  lerpBackwards: 0
+  backPath: 1
+  stationaryPoints: 0
+  stationaryStartTangents: 0
+  stationaryEndTangents: 0
+  scaleChanged: 0
+  storedFirstPosition: {x: 0, y: 0, z: 0}
+  interacting: 0
+  eventBools: 
+  followBools: 
+  segmentPoints:
+  - {x: 0.00000000745055, y: 0.17070323, z: -0.38352728}
+  - {x: 0.0000000070584156, y: 0.16466096, z: -0.37047848}
+  - {x: 0.0000000066662817, y: 0.15861867, z: -0.35742968}
+  - {x: 0.0000000062741474, y: 0.1525764, z: -0.34438086}
+  - {x: 0.000000005882013, y: 0.14653412, z: -0.33133206}
+  - {x: 0.0000000054898788, y: 0.14049184, z: -0.31828326}
+  - {x: 0.000000005097745, y: 0.13444957, z: -0.30523446}
+  - {x: 0.0000000047056106, y: 0.1284073, z: -0.29218566}
+  - {x: 0.0000000043134762, y: 0.12236503, z: -0.27913684}
+  - {x: 0.000000003921342, y: 0.11632275, z: -0.26608804}
+  - {x: 0.0000000035292078, y: 0.11028047, z: -0.25303924}
+  - {x: 0.0000000031370737, y: 0.1042382, z: -0.23999044}
+  - {x: 0.0000000027449396, y: 0.098195925, z: -0.22694165}
+  - {x: 0.000000002352805, y: 0.09215365, z: -0.21389282}
+  - {x: 0.0000000019606712, y: 0.086111374, z: -0.20084402}
+  - {x: 0.0000000015685366, y: 0.080069095, z: -0.1877952}
+  - {x: 0.0000000011764025, y: 0.07402682, z: -0.17474641}
+  - {x: 7.8426854e-10, y: 0.06798455, z: -0.16169761}
+  - {x: 3.9213405e-10, y: 0.061942272, z: -0.1486488}
+  - {x: 0, y: 0.0559, z: -0.1356}
+  - {x: 0, y: 0.0559, z: -0.1356}
+  - {x: 3.9213421e-10, y: 0.061942276, z: -0.1486488}
+  - {x: 7.8426843e-10, y: 0.06798455, z: -0.16169761}
+  - {x: 0.0000000011764025, y: 0.07402682, z: -0.17474641}
+  - {x: 0.0000000015685369, y: 0.0800691, z: -0.18779522}
+  - {x: 0.0000000019606712, y: 0.086111374, z: -0.20084402}
+  - {x: 0.000000002352805, y: 0.09215365, z: -0.21389282}
+  - {x: 0.0000000027449394, y: 0.098195925, z: -0.22694163}
+  - {x: 0.0000000031370737, y: 0.1042382, z: -0.23999044}
+  - {x: 0.000000003529208, y: 0.11028048, z: -0.25303924}
+  - {x: 0.0000000039213424, y: 0.116322756, z: -0.26608807}
+  - {x: 0.0000000043134762, y: 0.12236503, z: -0.27913684}
+  - {x: 0.00000000470561, y: 0.1284073, z: -0.29218566}
+  - {x: 0.000000005097745, y: 0.13444957, z: -0.30523446}
+  - {x: 0.0000000054898788, y: 0.14049184, z: -0.31828326}
+  - {x: 0.0000000058820135, y: 0.14653413, z: -0.3313321}
+  - {x: 0.0000000062741474, y: 0.1525764, z: -0.34438086}
+  - {x: 0.0000000066662813, y: 0.15861867, z: -0.35742968}
+  - {x: 0.000000007058416, y: 0.16466096, z: -0.37047848}
+  - {x: 0.00000000745055, y: 0.17070323, z: -0.38352728}
+  segmentsValidated: 1
+--- !u!1 &1078558959190378131
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1078558959190378130}
+  m_Layer: 10
+  m_Name: LeftToe_End
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1078558959190378130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078558959190378131}
+  m_LocalRotation: {x: -6.808601e-10, y: -8.682291e-16, z: -6.938894e-17, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0304, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1078558960108780226}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1078558960108780227
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1078558960108780226}
+  m_Layer: 10
+  m_Name: LeftToeBase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1078558960108780226
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078558960108780227}
+  m_LocalRotation: {x: 0.2164396, y: 0, z: 0, w: 0.97629607}
+  m_LocalPosition: {x: 0.000000003725275, y: 0.10845144, z: -0.000000059604623}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1078558959190378130}
+  m_Father: {fileID: 1078558958782969392}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 25, y: 0, z: 0}

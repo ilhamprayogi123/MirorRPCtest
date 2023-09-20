@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd6f984ead7e234792ffd717a78006f, type: 3}
+  m_Name: UnityArmatureSaveData
+  m_EditorClassIdentifier: 
+  tabPrefabs:
+  - {fileID: 3277852828269323775, guid: 562b93ce77ed7b74f8b3a0b1548e2ee1, type: 3}
+  - {fileID: 5263520776561392288, guid: e26f5f6bf0543fa4884e3023c3af54a5, type: 3}
+  - {fileID: 2197647760329148198, guid: 43a8fd041e0583e41b64774497abf730, type: 3}
+  - {fileID: 3640951497587328140, guid: 721c99f7c1fad434b8583a7e9042b403, type: 3}
+  - {fileID: 2352732711246164501, guid: d62c346dd43514b459fd795804a88d2f, type: 3}
+  - {fileID: 7167571446256662840, guid: d516b6c514cbdf54daf2b64d6f945b60, type: 3}
+  - {fileID: 5511269270732047385, guid: 05bed18bd8ffe2c48a68feb750c47536, type: 3}
+  - {fileID: 8372479939692104799, guid: c0abcb3cbc9fe2a45b1198d9d41867df, type: 3}
+  - {fileID: 5682469737143723892, guid: d2a3bf8da07e32244bc677bf76741a17, type: 3}
+  listPointer: 0300000003000000010000000100000001000000
+  excludePlayerMask: 1
+  surfaceRotation: 0
+  addComponentsOnParent: 1
+  addPivotOnPoint: 0
+  rightClickTimer: 100
+  spawnSettings:
+  - {fileID: 8370439318604630953, guid: 0ea67743b7e8d7d4fba419caa2a39dab, type: 3}
+  - {fileID: 4924316644435661958, guid: 8444015773c51b84b9b01b64e03ea384, type: 3}
+  - {fileID: 7794619791006667641, guid: 300f2fe039511b647a40dd245f5f96b3, type: 3}
+  - {fileID: 4338027645323843429, guid: 2a49bb12aedac2443959faad33285c1a, type: 3}
+  - {fileID: 1959848768014461456, guid: 68bb4e25a5db48144ac40113dea99c46, type: 3}
+  - {fileID: 6851300264963972516, guid: c0e4cd3eeb2a48d419d62b4837fec1eb, type: 3}
+  - {fileID: 6284235796268085978, guid: c1bc8224e6862ce42a8c9be68aa06d57, type: 3}
+  - {fileID: 4108463256186432989, guid: 0c1c38ae6f109d240840561e796a1355, type: 3}

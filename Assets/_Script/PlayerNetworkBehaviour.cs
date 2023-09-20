@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using UnityEngine.Networking.Types;
 using System;
 using Unity.VisualScripting;
+using razz;
 
 namespace StarterAssets
 {
@@ -95,13 +96,15 @@ namespace StarterAssets
                 assignButton.onClick.AddListener(assignAct);
                 playName = inputData.InputText;
                 
-                CharacterController charControl = GetComponent<CharacterController>();
+                CharacterController charControls = GetComponent<CharacterController>();
                 PlayerInput playInput = GetComponent<PlayerInput>();
                 ThirdPersonController TPControl = GetComponent<ThirdPersonController>();
+                //PlayerController playerConn = GetComponent<PlayerController>();
 
-                charControl.enabled = true;
+                charControls.enabled = true;
                 playInput.enabled = true;
                 TPControl.enabled = true;
+                //playerConn.enabled = true;
 
                 playerCam = GameObject.Find("PlayerFollowCamera");
                 virtualCam = playerCam.GetComponent<CinemachineVirtualCamera>();
@@ -180,7 +183,7 @@ namespace StarterAssets
         void Update()
         {
             Vector3 mousePos = Input.mousePosition;
-            mousePos.z = 100f;
+            mousePos.z = 200f;
             
             idNetwork = valueScript.idNet;
             playName = inputData.InputText;

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
@@ -31,12 +32,9 @@ namespace StarterAssets
         public Vector3 originVector;
         public Vector3 newOriginVectopr;
         
-        //Rigidbody rigid;
-
         private void Start()
         {
             isRaise = false;
-            //rigid = this.gameObject.GetComponent<Collider>().attachedRigidbody;
         }
 
         private void Update()
@@ -68,34 +66,68 @@ namespace StarterAssets
 
             if (posID.gameObject.GetComponent<ValueScript>().anySpace == true)
             {
+                Debug.Log("AnySpace");
                 posID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = posID.gameObject.GetComponent<ValueScript>().numIndex[intLoc];
                 valueScript.localNets = posID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
 
                 if (posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[valueScript.localNets].GetComponent<TestBool>().isCenter == true)
                 {
-                    Debug.Log("Test Center");
+                    //Debug.Log("Test Center");
                     localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
                     posID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
                     posID.gameObject.GetComponent<GroupSelfieManager>().CenterObject.Add(localID.gameObject);
                 }
+                
+                if (posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[valueScript.localNets].GetComponent<TestBool>().isSecondCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().SecondCenterObject.Add(localID.gameObject);
+                }
 
+                if (posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[valueScript.localNets].GetComponent<TestBool>().isThirdCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().ThirdCenterObject.Add(localID.gameObject);
+                }
+                
                 localID.gameObject.GetComponent<Transform>().position = posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[valueScript.localNets].transform.position;
                 
                 localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = valueScript.localNets;
                 
             }
-            else if (posID.gameObject.GetComponent<ValueScript>().isContinue == true && posID.gameObject.GetComponent<ValueScript>().anySpace == true)
+            else if (posID.gameObject.GetComponent<ValueScript>().anySpace == false && posID.gameObject.GetComponent<ValueScript>().isContinue == true)
             {
+                Debug.Log("IsContinue");
                 posID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = posID.gameObject.GetComponent<ValueScript>().indexContinue;
 
                 if (posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isCenter == true)
                 {
-                    Debug.Log("Test Center");
+                    //Debug.Log("Test Center");
                     localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
                     posID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
                     posID.gameObject.GetComponent<GroupSelfieManager>().CenterObject.Add(localID.gameObject);
                 }
+                
+                if (posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isSecondCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().SecondCenterObject.Add(localID.gameObject);
+                }
 
+                if (posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isThirdCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().ThirdCenterObject.Add(localID.gameObject);
+                }
+                
                 localID.gameObject.GetComponent<Transform>().position = posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].transform.position;
             }
             else
@@ -104,12 +136,28 @@ namespace StarterAssets
 
                 if (posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isCenter == true)
                 {
-                    Debug.Log("Test Center");
+                    //Debug.Log("Test Center");
                     localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
                     posID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
                     posID.gameObject.GetComponent<GroupSelfieManager>().CenterObject.Add(localID.gameObject);
                 }
+                
+                if (posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isSecondCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().SecondCenterObject.Add(localID.gameObject);
+                }
 
+                if (posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isThirdCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    posID.gameObject.GetComponent<GroupSelfieManager>().ThirdCenterObject.Add(localID.gameObject);
+                }
+                
                 localID.gameObject.GetComponent<Transform>().position = posID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].transform.position;
             }
 
@@ -117,6 +165,8 @@ namespace StarterAssets
 
             localID.gameObject.GetComponent<ValueScript>().GroupID = posID.gameObject.GetComponent<ValueScript>().GroupID;
             posID.gameObject.GetComponent<GroupSelfieManager>().SavedPosition.Add(localID.gameObject);
+
+            //posID.gameObject.GetComponent<GroupSelfieManager>().countNum++;
 
             localID.gameObject.GetComponent<ThirdPersonController>().MoveSpeed = 0;
             localID.gameObject.GetComponent<ThirdPersonController>().SprintSpeed = 0;
@@ -134,37 +184,75 @@ namespace StarterAssets
             if (localPosID.gameObject.GetComponent<ValueScript>().anySpace == true)
             {
                 netID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = localPosID.gameObject.GetComponent<ValueScript>().indexSaved;
+                Debug.Log("AnySpace");
                 localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = localPosID.gameObject.GetComponent<ValueScript>().numIndex[intNet];
                 valueScript.localNets = localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
 
                 if (localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[valueScript.localNets].GetComponent<TestBool>().isCenter == true)
                 {
-                    Debug.Log("Test Center");
+                    //Debug.Log("Test Center");
                     netID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
                     localPosID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
                     localPosID.gameObject.GetComponent<GroupSelfieManager>().CenterObject.Add(netID.gameObject);
                     CmdGetCenterObjData(localPosID, netID);
                 }
+                
+                if (localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[valueScript.localNets].GetComponent<TestBool>().isSecondCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    netID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().SecondCenterObject.Add(netID.gameObject);
+                    CmdGetSecondCenterObjData(localPosID, netID);
+                }
 
+                if (localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[valueScript.localNets].GetComponent<TestBool>().isThirdCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    netID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().ThirdCenterObject.Add(netID.gameObject);
+                    CmdGetThirdCenterObjData(localPosID, netID);
+                }
+                
                 netID.gameObject.GetComponent<Transform>().position = localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[valueScript.localNets].transform.position;
                 //netID.gameObject.GetComponent<PlayerNetworkBehaviour>().selfiePosIndex = valueScript.localNets;
                 netID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = valueScript.localNets;
                 CmdIndexArc(localPosID, intNet);
             }
-            else if (localPosID.gameObject.GetComponent<ValueScript>().isContinue == true && localPosID.gameObject.GetComponent<ValueScript>().anySpace == true)
+            else if (localPosID.gameObject.GetComponent<ValueScript>().anySpace == false && localPosID.gameObject.GetComponent<ValueScript>().isContinue == true)
             {
                 netID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = localPosID.gameObject.GetComponent<ValueScript>().indexContinue;
+                Debug.Log("IsContinue");
                 localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex = localPosID.gameObject.GetComponent<ValueScript>().indexContinue;
 
                 if (localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isCenter == true)
                 {
-                    Debug.Log("Test Center");
+                    //Debug.Log("Test Center");
                     netID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
                     localPosID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
                     localPosID.gameObject.GetComponent<GroupSelfieManager>().CenterObject.Add(netID.gameObject);
                     CmdGetCenterObjData(localPosID, netID);
                 }
+                
+                if (localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isSecondCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    netID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().SecondCenterObject.Add(netID.gameObject);
+                    CmdGetSecondCenterObjData(localPosID, netID);
+                }
 
+                if (localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isThirdCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    netID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().ThirdCenterObject.Add(netID.gameObject);
+                    CmdGetThirdCenterObjData(localPosID, netID);
+                }
+                
                 netID.gameObject.GetComponent<Transform>().position = localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].transform.position;
                 localPosID.gameObject.GetComponent<ValueScript>().isContinue = false;
             }
@@ -174,13 +262,31 @@ namespace StarterAssets
 
                 if (localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isCenter == true)
                 {
-                    Debug.Log("Test Center");
+                    //Debug.Log("Test Center");
                     netID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
                     localPosID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
                     localPosID.gameObject.GetComponent<GroupSelfieManager>().CenterObject.Add(netID.gameObject);
                     CmdGetCenterObjData(localPosID, netID);
                 }
+                
+                if (localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isSecondCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    netID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().SecondCenterObject.Add(netID.gameObject);
+                    CmdGetSecondCenterObjData(localPosID, netID);
+                }
 
+                if (localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].GetComponent<TestBool>().isThirdCenter == true)
+                {
+                    //Debug.Log("Test Center");
+                    netID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+                    localPosID.gameObject.GetComponent<GroupSelfieManager>().ThirdCenterObject.Add(netID.gameObject);
+                    CmdGetThirdCenterObjData(localPosID, netID);
+                }
+                
                 netID.gameObject.GetComponent<Transform>().position = localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].transform.position;
                 //localPosID.gameObject.GetComponent<GroupSelfieManager>().selfiePos[groupSelfieManager.selfiePosIndex].gameObject.SetActive(false);
             }
@@ -209,12 +315,42 @@ namespace StarterAssets
             RpcGetCenterobjData(targetID, addedID);
         }
 
+        // Command function to call rpc function for add the desired client object to special list.
+        [Command(requiresAuthority = false)]
+        void CmdGetSecondCenterObjData(NetworkIdentity targetID, NetworkIdentity addedID)
+        {
+            RpcGetSecondCenterobjData(targetID, addedID);
+        }
+
+        // Command function to call rpc function for add the desired client object to special list.
+        [Command(requiresAuthority = false)]
+        void CmdGetThirdCenterObjData(NetworkIdentity targetID, NetworkIdentity addedID)
+        {
+            RpcGetThirdCenterobjData(targetID, addedID);
+        }
+
         // Rpc function to add the desired client to list in all others client side.
         [ClientRpc]
         void RpcGetCenterobjData(NetworkIdentity targetID, NetworkIdentity addedID)
         {
             targetID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
             targetID.gameObject.GetComponent<GroupSelfieManager>().CenterObject.Add(addedID.gameObject);
+        }
+
+        // Rpc function to add the desired client to list in all others client side.
+        [ClientRpc]
+        void RpcGetSecondCenterobjData(NetworkIdentity targetID, NetworkIdentity addedID)
+        {
+            targetID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+            targetID.gameObject.GetComponent<GroupSelfieManager>().SecondCenterObject.Add(addedID.gameObject);
+        }
+
+        // Rpc function to add the desired client to list in all others client side.
+        [ClientRpc]
+        void RpcGetThirdCenterobjData(NetworkIdentity targetID, NetworkIdentity addedID)
+        {
+            targetID.gameObject.GetComponent<GroupSelfieManager>().isCenterAvailable = true;
+            targetID.gameObject.GetComponent<GroupSelfieManager>().ThirdCenterObject.Add(addedID.gameObject);
         }
 
         // Increase loc for client who provide group selfie
@@ -243,6 +379,10 @@ namespace StarterAssets
             int currentInt = localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
             localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex++;
             localID.gameObject.GetComponent<GroupSelfieManager>().countNum++;
+
+            //localID.gameObject.GetComponent<ValueScript>().countGroup = localID.gameObject.GetComponent<GroupSelfieManager>().countNum;
+            localID.gameObject.GetComponent<ValueScript>().changeIndex = true;
+
             int selfID = localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
 
             RpcTargetChangeIndex(localID.connectionToClient, localID, currentInt, selfID);
@@ -497,6 +637,12 @@ namespace StarterAssets
 
             localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex--;
             localID.gameObject.GetComponent<GroupSelfieManager>().countNum--;
+
+            localID.gameObject.GetComponent<ValueScript>().isMax = false;
+            localID.gameObject.GetComponent<ValueScript>().changeIndex = true;
+            
+            //localID.gameObject.GetComponent<ValueScript>().countGroup = localID.gameObject.GetComponent<GroupSelfieManager>().countNum;
+
             localID.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = false;
             int selfID = localID.gameObject.GetComponent<GroupSelfieManager>().selfiePosIndex;
 
@@ -511,8 +657,9 @@ namespace StarterAssets
             {
                 netID.gameObject.GetComponent<ValueScript>().anySpace = true;
             }
-
+            netID.gameObject.GetComponent<ValueScript>().isMax = false;
             netID.gameObject.GetComponent<ValueScript>().changeIndex = true;
+            
             CmdIndexTexMin(netID, selfID, locNetID);
         }
 
@@ -542,8 +689,6 @@ namespace StarterAssets
                 locNetID.gameObject.GetComponent<ThirdPersonController>().enabled = true;
                 locNetID.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
             }
-
-            netID.gameObject.GetComponent<GroupSelfieGameObj>().joinButtonCanvas.gameObject.SetActive(false);
 
             if (isLocalPlayer)
             {

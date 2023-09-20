@@ -1,0 +1,222 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8524163018554514964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8524163018554514965}
+  m_Layer: 10
+  m_Name: LeftToeBase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8524163018554514965
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524163018554514964}
+  m_LocalRotation: {x: 0.2164396, y: 0, z: 0, w: 0.97629607}
+  m_LocalPosition: {x: 0.000000003725275, y: 0.10845144, z: -0.000000059604623}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8524163019506459205}
+  m_Father: {fileID: 8524163018840167143}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 25, y: 0, z: 0}
+--- !u!1 &8524163018840167142
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8524163018840167143}
+  - component: {fileID: 8524163018840167144}
+  m_Layer: 10
+  m_Name: LeftFootForward
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8524163018840167143
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524163018840167142}
+  m_LocalRotation: {x: 0, y: -0.49816224, z: -0.86708385, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8524163018554514965}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 239.757, y: 180, z: 0}
+--- !u!114 &8524163018840167144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524163018840167142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b189b60af651c4fbddf6343e33e3ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _intObj: {fileID: 0}
+  effectorType: 7
+  matchChildrenBones: 1
+  excludeFromBones: []
+  overrideEffector: 0
+  oHorizontalAngle: 0
+  oHorizontalOffset: 0
+  oVerticalAngle: 0
+  oVerticalOffset: 0
+  oMaxRange: 0.5
+  oMinRange: 0
+  targetBones: []
+  speedDebug: 0
+  targetSegmentPoints:
+  - {x: 0.00000000745055, y: 0.114803225, z: -0.24792728}
+  - {x: 0.0000000070584156, y: 0.10876095, z: -0.23487848}
+  - {x: 0.0000000066662817, y: 0.10271867, z: -0.22182967}
+  - {x: 0.0000000062741474, y: 0.0966764, z: -0.20878087}
+  - {x: 0.000000005882013, y: 0.09063412, z: -0.19573206}
+  - {x: 0.0000000054898788, y: 0.08459185, z: -0.18268326}
+  - {x: 0.000000005097745, y: 0.07854958, z: -0.16963446}
+  - {x: 0.0000000047056106, y: 0.0725073, z: -0.15658565}
+  - {x: 0.0000000043134762, y: 0.06646503, z: -0.14353685}
+  - {x: 0.000000003921342, y: 0.06042275, z: -0.13048804}
+  - {x: 0.0000000035292078, y: 0.054380473, z: -0.11743923}
+  - {x: 0.0000000031370737, y: 0.0483382, z: -0.104390435}
+  - {x: 0.0000000027449396, y: 0.04229593, z: -0.09134164}
+  - {x: 0.000000002352805, y: 0.03625365, z: -0.078292824}
+  - {x: 0.0000000019606712, y: 0.030211376, z: -0.06524403}
+  - {x: 0.0000000015685366, y: 0.024169097, z: -0.05219521}
+  - {x: 0.0000000011764025, y: 0.018126825, z: -0.039146412}
+  - {x: 7.8426854e-10, y: 0.012084552, z: -0.026097612}
+  - {x: 3.9213405e-10, y: 0.0060422723, z: -0.013048799}
+  - {x: 0, y: 0, z: 0}
+  asset: 0
+  pathSegments:
+  - startPosition: {x: 0.00000000745055, y: 0.114803225, z: -0.24792728}
+    endPosition: {x: 0, y: 0, z: 0}
+    startTangent: {x: 0, y: 0, z: 0}
+    endTangent: {x: 0, y: 0, z: 0}
+    endRotation: {x: 0, y: 0, z: 0, w: 0}
+    bezier: 0
+    segmentChanged: 0
+    length: 0.27321738
+    callEndEvent: -1
+    followTransform: -1
+  - startPosition: {x: 0, y: 0, z: 0}
+    endPosition: {x: 0.00000000745055, y: 0.114803225, z: -0.24792728}
+    startTangent: {x: 0, y: 0, z: 0}
+    endTangent: {x: 0, y: 0, z: 0}
+    endRotation: {x: 0, y: 0, z: 0, w: 0}
+    bezier: 0
+    segmentChanged: 0
+    length: 0.27321738
+    callEndEvent: -1
+    followTransform: -1
+  backCount: 1
+  bezierMode: 0
+  endEvents: []
+  followTransforms: []
+  targetTotalLength: 0.27321738
+  backTotalLength: 0.27321738
+  resetAfterInteraction: 0
+  lerpBackwards: 0
+  backPath: 1
+  stationaryPoints: 0
+  stationaryStartTangents: 0
+  stationaryEndTangents: 0
+  scaleChanged: 0
+  storedFirstPosition: {x: 0, y: 0, z: 0}
+  interacting: 0
+  eventBools: 
+  followBools: 
+  segmentPoints:
+  - {x: 0.00000000745055, y: 0.114803225, z: -0.24792728}
+  - {x: 0.0000000070584156, y: 0.10876095, z: -0.23487848}
+  - {x: 0.0000000066662817, y: 0.10271867, z: -0.22182967}
+  - {x: 0.0000000062741474, y: 0.0966764, z: -0.20878087}
+  - {x: 0.000000005882013, y: 0.09063412, z: -0.19573206}
+  - {x: 0.0000000054898788, y: 0.08459185, z: -0.18268326}
+  - {x: 0.000000005097745, y: 0.07854958, z: -0.16963446}
+  - {x: 0.0000000047056106, y: 0.0725073, z: -0.15658565}
+  - {x: 0.0000000043134762, y: 0.06646503, z: -0.14353685}
+  - {x: 0.000000003921342, y: 0.06042275, z: -0.13048804}
+  - {x: 0.0000000035292078, y: 0.054380473, z: -0.11743923}
+  - {x: 0.0000000031370737, y: 0.0483382, z: -0.104390435}
+  - {x: 0.0000000027449396, y: 0.04229593, z: -0.09134164}
+  - {x: 0.000000002352805, y: 0.03625365, z: -0.078292824}
+  - {x: 0.0000000019606712, y: 0.030211376, z: -0.06524403}
+  - {x: 0.0000000015685366, y: 0.024169097, z: -0.05219521}
+  - {x: 0.0000000011764025, y: 0.018126825, z: -0.039146412}
+  - {x: 7.8426854e-10, y: 0.012084552, z: -0.026097612}
+  - {x: 3.9213405e-10, y: 0.0060422723, z: -0.013048799}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 3.9213421e-10, y: 0.006042275, z: -0.013048804}
+  - {x: 7.8426843e-10, y: 0.01208455, z: -0.026097609}
+  - {x: 0.0000000011764025, y: 0.018126825, z: -0.039146412}
+  - {x: 0.0000000015685369, y: 0.0241691, z: -0.052195217}
+  - {x: 0.0000000019606712, y: 0.030211376, z: -0.06524403}
+  - {x: 0.000000002352805, y: 0.03625365, z: -0.078292824}
+  - {x: 0.0000000027449394, y: 0.042295925, z: -0.09134163}
+  - {x: 0.0000000031370737, y: 0.0483382, z: -0.104390435}
+  - {x: 0.000000003529208, y: 0.054380476, z: -0.11743924}
+  - {x: 0.0000000039213424, y: 0.060422752, z: -0.13048805}
+  - {x: 0.0000000043134762, y: 0.06646503, z: -0.14353685}
+  - {x: 0.00000000470561, y: 0.0725073, z: -0.15658565}
+  - {x: 0.000000005097745, y: 0.07854958, z: -0.16963446}
+  - {x: 0.0000000054898788, y: 0.08459185, z: -0.18268326}
+  - {x: 0.0000000058820135, y: 0.09063413, z: -0.19573207}
+  - {x: 0.0000000062741474, y: 0.0966764, z: -0.20878087}
+  - {x: 0.0000000066662813, y: 0.10271867, z: -0.22182967}
+  - {x: 0.000000007058416, y: 0.10876095, z: -0.23487848}
+  - {x: 0.00000000745055, y: 0.114803225, z: -0.24792728}
+  segmentsValidated: 1
+--- !u!1 &8524163019506459204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8524163019506459205}
+  m_Layer: 10
+  m_Name: LeftToe_End
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8524163019506459205
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524163019506459204}
+  m_LocalRotation: {x: -6.808601e-10, y: -8.682291e-16, z: -6.938894e-17, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0304, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8524163018554514965}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

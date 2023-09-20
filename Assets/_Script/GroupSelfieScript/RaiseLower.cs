@@ -29,9 +29,9 @@ namespace StarterAssets
 
         private void Update()
         {
-            if (gameObject.transform.position.y >= 0.3)
+            if (gameObject.transform.position.y >= 0.9)
             {
-                gameObject.transform.position = new Vector3(transform.position.x, 0.3f, transform.position.z);
+                gameObject.transform.position = new Vector3(transform.position.x, 0.9f, transform.position.z);
             }
 
             if (gameObject.transform.position.y <= 0)
@@ -89,6 +89,8 @@ namespace StarterAssets
             NetworkIdentity targetID = NetworkServer.spawned[localeIDs];
 
             targetID.gameObject.GetComponent<RaiseLower>().RaisePosFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().RaisePosSecondFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().RaisePosThirdFunc();
 
             RpcRaise(targetID);
         }
@@ -100,6 +102,8 @@ namespace StarterAssets
             NetworkIdentity targetID = NetworkServer.spawned[localeIDs];
 
             targetID.gameObject.GetComponent<RaiseLower>().LowerPosFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().LowerPosSecondFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().LowerPosThirdFunc();
 
             RpcLower(targetID);
         }
@@ -111,6 +115,8 @@ namespace StarterAssets
             NetworkIdentity targetID = NetworkServer.spawned[localeIDs];
 
             targetID.gameObject.GetComponent<RaiseLower>().BackRaisePosFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().BackRaiseSecondPosFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().BackRaiseThirdPosFunc();
 
             RpcBackRaise(targetID);
         }
@@ -120,6 +126,8 @@ namespace StarterAssets
         void RpcRaise(NetworkIdentity targetID)
         {
             targetID.gameObject.GetComponent<RaiseLower>().RaisePosFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().RaisePosSecondFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().RaisePosThirdFunc();
         }
 
         // Rpc function to call main Lower Function at all others client side
@@ -127,13 +135,17 @@ namespace StarterAssets
         void RpcLower(NetworkIdentity targetID)
         {
             targetID.gameObject.GetComponent<RaiseLower>().LowerPosFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().LowerPosSecondFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().LowerPosThirdFunc();
         }
 
-        // Rpc function to call main Reset Function at all others client side
+        // Rpc function to call main Reset Function at all others client side POV
         [ClientRpc]
         void RpcBackRaise(NetworkIdentity targetID)
         {
             targetID.gameObject.GetComponent<RaiseLower>().BackRaisePosFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().BackRaiseSecondPosFunc();
+            targetID.gameObject.GetComponent<RaiseLower>().BackRaiseThirdPosFunc();
         }
 
         // Function to raise height position 
@@ -153,7 +165,41 @@ namespace StarterAssets
                 }
             }
         }
+        
+        public void RaisePosSecondFunc()
+        {
+            foreach (GameObject CenterObj in groupSelfieManager.SecondCenterObject)
+            {
+                if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos == true)
+                {
+                    CenterObj.gameObject.GetComponent<PosRotScript>().varHeight = CenterObj.gameObject.GetComponent<Transform>().position;
 
+                    CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight = new Vector3(CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.x, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.y + 0.6f, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.z);
+                    CenterObj.gameObject.GetComponent<Transform>().gameObject.transform.position = CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight;
+                    CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = true;
+
+                    CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = false;
+                }
+            }
+        }
+
+        public void RaisePosThirdFunc()
+        {
+            foreach (GameObject CenterObj in groupSelfieManager.ThirdCenterObject)
+            {
+                if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos == true)
+                {
+                    CenterObj.gameObject.GetComponent<PosRotScript>().varHeight = CenterObj.gameObject.GetComponent<Transform>().position;
+
+                    CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight = new Vector3(CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.x, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.y + 0.9f, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.z);
+                    CenterObj.gameObject.GetComponent<Transform>().gameObject.transform.position = CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight;
+                    CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = true;
+
+                    CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = false;
+                }
+            }
+        }
+        
         // Function to lower height position 
         public void LowerPosFunc()
         {
@@ -169,7 +215,39 @@ namespace StarterAssets
                 }
             }
         }
+        
+        // Function to lower height position 
+        public void LowerPosSecondFunc()
+        {
+            foreach (GameObject CenterObj in groupSelfieManager.SecondCenterObject)
+            {
+                if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos == true)
+                {
+                    CenterObj.gameObject.GetComponent<PosRotScript>().varHeight = CenterObj.gameObject.GetComponent<Transform>().position;
+                    CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight = new Vector3(CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.x, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.y - 0.6f, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.z);
+                    CenterObj.gameObject.GetComponent<Transform>().gameObject.transform.position = CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight;
+                    CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
+                    CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = false;
+                }
+            }
+        }
 
+        // Function to lower height position 
+        public void LowerPosThirdFunc()
+        {
+            foreach (GameObject CenterObj in groupSelfieManager.ThirdCenterObject)
+            {
+                if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos == true)
+                {
+                    CenterObj.gameObject.GetComponent<PosRotScript>().varHeight = CenterObj.gameObject.GetComponent<Transform>().position;
+                    CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight = new Vector3(CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.x, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.y - 0.9f, CenterObj.gameObject.GetComponent<PosRotScript>().varHeight.z);
+                    CenterObj.gameObject.GetComponent<Transform>().gameObject.transform.position = CenterObj.gameObject.GetComponent<PosRotScript>().newVarHeight;
+                    CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
+                    CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = false;
+                }
+            }
+        }
+        
         // Function to reset position for the member of the selfie group.
         public void BackRaisePosFunc()
         {
@@ -194,5 +272,56 @@ namespace StarterAssets
                 }
             }
         }
+        
+        // Function to reset position for the member of the selfie group.
+        public void BackRaiseSecondPosFunc()
+        {
+            foreach (GameObject CenterObj in groupSelfieManager.SecondCenterObject)
+            {
+                if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos == true)
+                {
+                    if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising == true)
+                    {
+                        CenterObj.gameObject.GetComponent<Transform>().gameObject.transform.position = CenterObj.gameObject.GetComponent<PosRotScript>().varHeight;
+                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = false;
+                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
+                        CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = true;
+                        Debug.Log("TestDebug");
+                    }
+                    else if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising == false)
+                    {
+                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = false;
+                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
+                        CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = true;
+                    }
+                }
+            }
+        }
+
+        // Function to reset position for the member of the selfie group.
+        public void BackRaiseThirdPosFunc()
+        {
+            foreach (GameObject CenterObj in groupSelfieManager.ThirdCenterObject)
+            {
+                if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos == true)
+                {
+                    if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising == true)
+                    {
+                        CenterObj.gameObject.GetComponent<Transform>().gameObject.transform.position = CenterObj.gameObject.GetComponent<PosRotScript>().varHeight;
+                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = false;
+                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
+                        CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = true;
+                        Debug.Log("TestDebug");
+                    }
+                    else if (CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising == false)
+                    {
+                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isCenterPos = false;
+                        CenterObj.gameObject.GetComponent<GroupSelfieManager>().isRaising = false;
+                        CenterObj.gameObject.GetComponent<ThirdPersonController>().enabled = true;
+                    }
+                }
+            }
+        }
+        
     }
 }

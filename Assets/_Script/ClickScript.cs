@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
+using razz;
 using Cinemachine;
 using TMPro;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using UnityEngine.Networking.Types;
 using System;
-using UnityEditor.Experimental.GraphView;
+//using UnityEditor.Experimental.GraphView;
 
 namespace StarterAssets
 {
@@ -26,6 +27,29 @@ namespace StarterAssets
         private PosRotScript posRot;
         [SerializeField]
         private AnimScript animScript;
+
+        public GameObject interactCube;
+        public GameObject cubeHand;
+
+        private void Start()
+        {
+            interactCube.gameObject.SetActive(false);
+            cubeHand.gameObject.SetActive(false);
+
+            if (isLocalPlayer)
+            {
+                PlayerController playerConn = GetComponent<PlayerController>();
+
+                playerConn.enabled = false;
+            }
+
+            /*
+            if (isLocalPlayer)
+            {
+                interactCube.gameObject.SetActive(false);
+            }
+            */
+        }
 
         private void Update()
         {

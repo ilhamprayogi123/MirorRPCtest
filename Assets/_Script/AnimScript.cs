@@ -1,8 +1,10 @@
 using Mirror;
+using razz;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
+//using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Networking.Types;
 
 namespace StarterAssets
 {
@@ -19,6 +21,18 @@ namespace StarterAssets
         private PosRotScript posRot;
         [SerializeField]
         private GameObjectScript gameObjectScript;
+        [SerializeField]
+        private ClickScript clickScript;
+
+        [SerializeField]
+        private Interactor interact;
+
+        //public bool isInteract;
+
+        private void Start()
+        {
+            //isInteract = false;
+        }
 
         // Call Command Function to play Couple Animation
         public void YesAnswer()
@@ -35,9 +49,23 @@ namespace StarterAssets
 
             IEnumerator animTimePlay(float animTime)
             {
+                if (playerNet.animDatas[animIndex].AnimState == "Greeting")
+                {
+                    clickScript.interactCube.gameObject.SetActive(true);
+                    //isInteract = true;
+                    interact.isInteract = true;
+                    yield return new WaitForSeconds(animTime);
+                    //clickScript.interactCube.gameObject.SetActive(false);
+                    //clickScript.cubeHand.gameObject.SetActive(true);
+                }
+
                 playerNet.animator.CrossFadeInFixedTime(playerNet.animDatas[animIndex].AnimState, 0.1f);
+                interact.isInteract = true;
                 yield return new WaitForSeconds(animTime);
-                playerNet.animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
+                clickScript.interactCube.gameObject.SetActive(false);
+                interact.isInteract = false;
+                //playerNet.animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
+                playerNet.animator.CrossFadeInFixedTime("Grounded", 0.1f);
             }
             RpclocalAnimPlay(localePlay, animIndex);
         }
@@ -53,10 +81,22 @@ namespace StarterAssets
 
             IEnumerator animTimePlay(float animTime)
             {
+                if (playerNet.animDatas[animIndex].AnimState == "Greeting")
+                {
+                    //clickScript.interactCube.gameObject.SetActive(true);
+                    localeID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(true);
+                    localeID.gameObject.GetComponent<Interactor>().isInteract = true;
+                    yield return new WaitForSeconds(animTime);
+                }
+
                 playerNet.animator.CrossFadeInFixedTime(playerNet.animDatas[animIndex].AnimState, 0.1f);
+                localeID.gameObject.GetComponent<Interactor>().isInteract = true;
                 localeID.gameObject.GetComponent<CharcControl>().ControlStop();
                 yield return new WaitForSeconds(animTime);
-                playerNet.animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
+                localeID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(false);
+                localeID.gameObject.GetComponent<Interactor>().isInteract = false;
+                //playerNet.animator.CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
+                playerNet.animator.CrossFadeInFixedTime("Grounded", 0.1f);
                 localeID.gameObject.GetComponent<CharcControl>().ControlON();
             }
             //localeID.gameObject.GetComponent<UiCanvas>().WaitCanvas.gameObject.SetActive(false);
@@ -79,16 +119,32 @@ namespace StarterAssets
 
             IEnumerator animTimePlay(float animPlay)
             {
+                if (playerNet.animDatas[animIndex].AnimState == "Greeting")
+                {
+                    //clickScript.interactCube.gameObject.SetActive(true);
+                    opponentId.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(true);
+                    opponentId.gameObject.GetComponent<Interactor>().isInteract = true;
+                    //localeID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(true);
+
+                    yield return new WaitForSeconds(animPlay);
+                    //opponentId.gameObject.GetComponent<ClickScript>().cubeHand.gameObject.SetActive(true);
+                    //opponentId.gameObject.GetComponent<ClickScript>().cubeHand.gameObject.SetActive(true);
+                }
+
                 opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime(playerNet.animDatas[animIndex].AnimState, 0.1f);
+                opponentId.gameObject.GetComponent<Interactor>().isInteract = true;
                 yield return new WaitForSeconds(animPlay);
-                opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
+                opponentId.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(false);
+                opponentId.gameObject.GetComponent<Interactor>().isInteract = false;
+                //opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
+                opponentId.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Grounded", 0.1f);
             }
-            RpcAnimator(opponentId.connectionToClient, objectId, opponentId, localeID, animIndex);
+            RpcAnimator(opponentId.connectionToClient, objectId, localID, opponentId, localeID, animIndex);
         }
 
         // Function to call animation for other client, also change to rotation of other client game object
         [TargetRpc]
-        void RpcAnimator(NetworkConnectionToClient netId, uint objectId, NetworkIdentity networkID, NetworkIdentity localeID, int animindex)
+        void RpcAnimator(NetworkConnectionToClient netId, uint objectId, uint localID, NetworkIdentity networkID, NetworkIdentity localeID, int animindex)
         {
             localeID.gameObject.GetComponent<Transform>().position = posRot.newVar;
             localeID.gameObject.GetComponent<Transform>().rotation = posRot.newRot;
@@ -98,11 +154,91 @@ namespace StarterAssets
 
             IEnumerator animTimePlay(float animTime)
             {
+                if (playerNet.animDatas[animindex].AnimState == "Greeting")
+                {
+                    //clickScript.interactCube.gameObject.SetActive(true);
+                    //networkID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(true);
+                    localeID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(true);
+                    networkID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(true);
+                    localeID.gameObject.GetComponent<Interactor>().isInteract = true;
+                    networkID.gameObject.GetComponent<Interactor>().isInteract = true;
+
+                    yield return new WaitForSeconds(animTime);
+
+                    //localeID.gameObject.GetComponent<ClickScript>().cubeHand.gameObject.SetActive(true);
+                    //networkID.gameObject.GetComponent<ClickScript>().cubeHand.gameObject.SetActive(true);
+                    //localeID.gameObject.GetComponent<ClickScript>().cubeHand.gameObject.SetActive(true);
+                }
+
                 networkID.gameObject.GetComponent<Animator>().CrossFadeInFixedTime(playerNet.animDatas[animindex].AnimState, 0.1f);
+                networkID.gameObject.GetComponent<Interactor>().isInteract = true;
+                localeID.gameObject.GetComponent<Interactor>().isInteract = true;
                 networkID.gameObject.GetComponent<CharcControl>().ControlStop();
                 yield return new WaitForSeconds(animTime);
-                networkID.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
+                //networkID.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Idle Walk Run Blend", 0.1f);
+
+                localeID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(false);
+                networkID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(false);
+                localeID.gameObject.GetComponent<Interactor>().isInteract = false;
+                networkID.gameObject.GetComponent<Interactor>().isInteract = false;
+
+                networkID.gameObject.GetComponent<Animator>().CrossFadeInFixedTime("Grounded", 0.1f);
                 networkID.gameObject.GetComponent<CharcControl>().ControlON();
+            }
+            CmdActivateCube(objectId, localID, animindex);
+        }
+
+        [Command(requiresAuthority = false)]
+        void CmdActivateCube(uint objectID, uint localID, int animIndex)
+        {
+            NetworkIdentity netID = NetworkServer.spawned[objectID];
+
+            StartCoroutine(animTimePlay(playerNet.countAnimTime));
+
+            IEnumerator animTimePlay(float animPlay)
+            {
+                if (playerNet.animDatas[animIndex].AnimState == "Greeting")
+                {
+                    //clickScript.interactCube.gameObject.SetActive(true);
+                    netID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(true);
+                    netID.gameObject.GetComponent<Interactor>().isInteract = true;
+                    //localeID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(true);
+
+                    yield return new WaitForSeconds(animPlay);
+
+                    //netID.gameObject.GetComponent<ClickScript>().cubeHand.gameObject.SetActive(true);
+                }
+
+                yield return new WaitForSeconds(animPlay);
+                netID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(false);
+                netID.gameObject.GetComponent<Interactor>().isInteract = false;
+            }
+
+            RpcTargetCube(netID, animIndex);
+        }
+
+        [TargetRpc]
+        void RpcTargetCube(NetworkIdentity netID, int animIndex)
+        {
+            StartCoroutine(animTimePlay(playerNet.countAnimTime));
+
+            IEnumerator animTimePlay(float animPlay)
+            {
+                if (playerNet.animDatas[animIndex].AnimState == "Greeting")
+                {
+                    //clickScript.interactCube.gameObject.SetActive(true);
+                    netID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(true);
+                    netID.gameObject.GetComponent<Interactor>().isInteract = true;
+                    //localeID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(true);
+
+                    yield return new WaitForSeconds(animPlay);
+
+                    //netID.gameObject.GetComponent<ClickScript>().cubeHand.gameObject.SetActive(true);
+                }
+
+                yield return new WaitForSeconds(animPlay);
+                netID.gameObject.GetComponent<ClickScript>().interactCube.gameObject.SetActive(false);
+                netID.gameObject.GetComponent<Interactor>().isInteract = false;
             }
         }
 

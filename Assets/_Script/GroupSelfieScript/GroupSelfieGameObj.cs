@@ -14,7 +14,9 @@ namespace StarterAssets
         
         public GameObject SelfieReqPanel;
         public GameObject ExitRequestPanel;
+        //[SyncVar]
         public GameObject SelfieCanvas;
+        //[SyncVar]
         public GameObject joinButtonCanvas;
         public GameObject buttonSelfieCanvas;
         public GameObject closeSelfieCanvas;

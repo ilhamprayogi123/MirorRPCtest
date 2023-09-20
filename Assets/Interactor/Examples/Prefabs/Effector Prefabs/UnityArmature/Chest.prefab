@@ -1,0 +1,160 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5511269270732047385
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5511269270732047383}
+  - component: {fileID: 5511269270732047382}
+  m_Layer: 10
+  m_Name: Chest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5511269270732047383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5511269270732047385}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.05, z: -0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5511269270732047382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5511269270732047385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b189b60af651c4fbddf6343e33e3ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _intObj: {fileID: 0}
+  effectorType: 0
+  matchChildrenBones: 1
+  excludeFromBones: []
+  overrideEffector: 1
+  oHorizontalAngle: 140
+  oHorizontalOffset: 14
+  oVerticalAngle: 136
+  oVerticalOffset: 14
+  oMaxRange: 1.5
+  oMinRange: 0.05
+  targetBones: []
+  speedDebug: 0
+  targetSegmentPoints:
+  - {x: 0.2, y: 0.05, z: -0.1}
+  - {x: 0.18947369, y: 0.05, z: -0.1}
+  - {x: 0.17894737, y: 0.05, z: -0.1}
+  - {x: 0.16842106, y: 0.05, z: -0.1}
+  - {x: 0.15789475, y: 0.05, z: -0.1}
+  - {x: 0.14736842, y: 0.05, z: -0.1}
+  - {x: 0.13684212, y: 0.05, z: -0.1}
+  - {x: 0.12631579, y: 0.05, z: -0.1}
+  - {x: 0.11578947, y: 0.05, z: -0.1}
+  - {x: 0.10526316, y: 0.05, z: -0.1}
+  - {x: 0.09473684, y: 0.05, z: -0.1}
+  - {x: 0.08421053, y: 0.05, z: -0.1}
+  - {x: 0.073684216, y: 0.05, z: -0.1}
+  - {x: 0.06315789, y: 0.05, z: -0.1}
+  - {x: 0.052631583, y: 0.05, z: -0.1}
+  - {x: 0.042105258, y: 0.05, z: -0.1}
+  - {x: 0.031578947, y: 0.05, z: -0.1}
+  - {x: 0.021052634, y: 0.05, z: -0.1}
+  - {x: 0.010526312, y: 0.05, z: -0.1}
+  - {x: 0, y: 0.05, z: -0.1}
+  asset: 0
+  pathSegments:
+  - startPosition: {x: 0.2, y: 0, z: 0}
+    endPosition: {x: 0, y: 0, z: 0}
+    startTangent: {x: 0, y: 0, z: 0}
+    endTangent: {x: 0, y: 0, z: 0}
+    endRotation: {x: 0, y: 0, z: 0, w: 0}
+    bezier: 0
+    segmentChanged: 0
+    length: 0.20000002
+    callEndEvent: -1
+    followTransform: -1
+  - startPosition: {x: 0, y: 0, z: 0}
+    endPosition: {x: 0.2, y: 0, z: 0}
+    startTangent: {x: 0, y: 0, z: 0}
+    endTangent: {x: 0, y: 0, z: 0}
+    endRotation: {x: 0, y: 0, z: 0, w: 0}
+    bezier: 0
+    segmentChanged: 0
+    length: 0.2
+    callEndEvent: -1
+    followTransform: -1
+  backCount: 1
+  bezierMode: 0
+  endEvents: []
+  followTransforms: []
+  targetTotalLength: 0.20000002
+  backTotalLength: 0.2
+  resetAfterInteraction: 0
+  lerpBackwards: 0
+  backPath: 1
+  stationaryPoints: 0
+  stationaryStartTangents: 0
+  stationaryEndTangents: 0
+  scaleChanged: 0
+  storedFirstPosition: {x: 0, y: 0, z: 0}
+  interacting: 0
+  eventBools: 
+  followBools: 
+  segmentPoints:
+  - {x: 0.2, y: 0.05, z: -0.1}
+  - {x: 0.18947369, y: 0.05, z: -0.1}
+  - {x: 0.17894737, y: 0.05, z: -0.1}
+  - {x: 0.16842106, y: 0.05, z: -0.1}
+  - {x: 0.15789475, y: 0.05, z: -0.1}
+  - {x: 0.14736842, y: 0.05, z: -0.1}
+  - {x: 0.13684212, y: 0.05, z: -0.1}
+  - {x: 0.12631579, y: 0.05, z: -0.1}
+  - {x: 0.11578947, y: 0.05, z: -0.1}
+  - {x: 0.10526316, y: 0.05, z: -0.1}
+  - {x: 0.09473684, y: 0.05, z: -0.1}
+  - {x: 0.08421053, y: 0.05, z: -0.1}
+  - {x: 0.073684216, y: 0.05, z: -0.1}
+  - {x: 0.06315789, y: 0.05, z: -0.1}
+  - {x: 0.052631583, y: 0.05, z: -0.1}
+  - {x: 0.042105258, y: 0.05, z: -0.1}
+  - {x: 0.031578947, y: 0.05, z: -0.1}
+  - {x: 0.021052634, y: 0.05, z: -0.1}
+  - {x: 0.010526312, y: 0.05, z: -0.1}
+  - {x: 0, y: 0.05, z: -0.1}
+  - {x: 0, y: 0.05, z: -0.1}
+  - {x: 0.010526316, y: 0.05, z: -0.1}
+  - {x: 0.021052632, y: 0.05, z: -0.1}
+  - {x: 0.031578947, y: 0.05, z: -0.1}
+  - {x: 0.042105265, y: 0.05, z: -0.1}
+  - {x: 0.052631583, y: 0.05, z: -0.1}
+  - {x: 0.06315789, y: 0.05, z: -0.1}
+  - {x: 0.07368421, y: 0.05, z: -0.1}
+  - {x: 0.08421053, y: 0.05, z: -0.1}
+  - {x: 0.094736844, y: 0.05, z: -0.1}
+  - {x: 0.105263166, y: 0.05, z: -0.1}
+  - {x: 0.11578947, y: 0.05, z: -0.1}
+  - {x: 0.12631579, y: 0.05, z: -0.1}
+  - {x: 0.13684212, y: 0.05, z: -0.1}
+  - {x: 0.14736842, y: 0.05, z: -0.1}
+  - {x: 0.15789475, y: 0.05, z: -0.1}
+  - {x: 0.16842106, y: 0.05, z: -0.1}
+  - {x: 0.17894737, y: 0.05, z: -0.1}
+  - {x: 0.18947369, y: 0.05, z: -0.1}
+  - {x: 0.2, y: 0.05, z: -0.1}
+  segmentsValidated: 1

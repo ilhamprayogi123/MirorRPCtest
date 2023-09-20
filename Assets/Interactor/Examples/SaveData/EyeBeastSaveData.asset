@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd6f984ead7e234792ffd717a78006f, type: 3}
+  m_Name: EyeBeastSaveData
+  m_EditorClassIdentifier: 
+  tabPrefabs:
+  - {fileID: 5694544785599899078, guid: 07900c0752f410f45b872c59cae23427, type: 3}
+  - {fileID: 1497694574781400303, guid: 36ad68eaeb4c24248bdc7851fd09e773, type: 3}
+  - {fileID: 5999984098466434033, guid: 4b1ce5102439dba40b4f71d61a8a7b3c, type: 3}
+  listPointer: 010000000100000001000000
+  excludePlayerMask: 0
+  surfaceRotation: 0
+  addComponentsOnParent: 0
+  addPivotOnPoint: 0
+  rightClickTimer: 100
+  spawnSettings: []
